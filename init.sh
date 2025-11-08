@@ -27,11 +27,11 @@ sed -i "s|GOOGLE_LDAPTLS_CERT|$GOOGLE_LDAPTLS_CERT|g" /etc/freeradius/mods-avail
 sed -i "s|GOOGLE_LDAPTLS_KEY|$GOOGLE_LDAPTLS_KEY|g" /etc/freeradius/mods-available/ldap
 
 # Update SQL configuration with database environment variables
-sed -i "s|ENV_DB_HOST|${DB_HOST:-mysql}|g" /etc/freeradius/mods-available/sql
-sed -i "s|ENV_DB_PORT|${DB_PORT:-3306}|g" /etc/freeradius/mods-available/sql
-sed -i "s|ENV_DB_USER|${DB_USER:-radius}|g" /etc/freeradius/mods-available/sql
-sed -i "s|ENV_DB_PASSWORD|${DB_PASSWORD:-radiuspass}|g" /etc/freeradius/mods-available/sql
-sed -i "s|ENV_DB_NAME|${DB_NAME:-radius}|g" /etc/freeradius/mods-available/sql
+sed -i "s|\${ENV_DB_HOST}|${DB_HOST:-mysql}|g" /etc/freeradius/mods-available/sql
+sed -i "s|\${ENV_DB_PORT}|${DB_PORT:-3306}|g" /etc/freeradius/mods-available/sql
+sed -i "s|\"\${ENV_DB_USER}\"|\"${DB_USER:-radius}\"|g" /etc/freeradius/mods-available/sql
+sed -i "s|\"\${ENV_DB_PASSWORD}\"|\"${DB_PASSWORD:-radiuspass}\"|g" /etc/freeradius/mods-available/sql
+sed -i "s|\"\${ENV_DB_NAME}\"|\"${DB_NAME:-radius}\"|g" /etc/freeradius/mods-available/sql
 sed -i "s|ENV_ENABLE_SQL_TRACE|${ENABLE_SQL_TRACE:-no}|g" /etc/freeradius/mods-available/sql
 sed -i "s|ENV_DB_MAX_CONNECTIONS|${DB_MAX_CONNECTIONS:-20}|g" /etc/freeradius/mods-available/sql
 
@@ -82,4 +82,5 @@ do
 done
 
 
-/docker-entrypoint.sh "$@"
+# Start FreeRADIUS in foreground mode
+exec freeradius -X

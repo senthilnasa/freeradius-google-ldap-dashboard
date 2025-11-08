@@ -16,11 +16,6 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - DOMAIN_1=${DOMAIN_1}
-      - DOMAIN_2=${DOMAIN_2}
-      - DOMAIN_3=${DOMAIN_3}
-      - STAFF_DOMAINS=${STAFF_DOMAINS}
-      - STUDENT_DOMAINS=${STUDENT_DOMAINS}
       - RADIUS_MAX_CONNECTIONS=${RADIUS_MAX_CONNECTIONS}
       - LDAP_MAX_CONNECTIONS=${LDAP_MAX_CONNECTIONS}
       - LOG_LEVEL=${LOG_LEVEL}
@@ -113,4 +108,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.25.0.0/16

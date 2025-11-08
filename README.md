@@ -1,56 +1,50 @@
-# 🔐 FreeRADIUS Google LDAP Enterprise Dashboard# 🔐 FreeRADIUS Google LDAP Enterprise Dashboard# 🔐 FreeRADIUS Google LDAP Enterprise Dashboard
+# 🔐 FreeRADIUS Google LDAP Enterprise Dashboard# 🔐 FreeRADIUS Google LDAP Enterprise Dashboard
 
 
 
-<div align="center">
+<div align="center"><div align="center">
 
 
 
-[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=gold)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers)<div align="center"><div align="center">
-
-[![GitHub forks](https://img.shields.io/github/forks/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=blue)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/network/members)
-
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)](https://www.docker.com/)
-
-[![License](https://img.shields.io/github/license/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=orange)](LICENSE)
-
-[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=gold)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers)[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=gold)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers)
-
-**🚀 Production-Ready Enterprise RADIUS Authentication with Google Workspace Integration**
-
-[![GitHub forks](https://img.shields.io/github/forks/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=blue)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/network/members)[![GitHub forks](https://img.shields.io/github/forks/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=blue)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/network/members)
-
-*Complete Docker-based solution for WiFi/Network authentication with advanced VLAN management*
-
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)](https://www.docker.com/)[![Docker Pulls](https://img.shields.io/docker/pulls/library/freeradius?style=for-the-badge&color=green)](https://hub.docker.com/r/freeradius/freeradius-server)
-
-[⚡ Quick Start](#-quick-start) • [🌟 Features](#-features) • [🏗️ Architecture](#️-architecture) • [📖 Configuration](#-configuration)
-
-[![License](https://img.shields.io/github/license/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=orange)](LICENSE)[![License](https://img.shields.io/github/license/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=orange)](LICENSE)
-
-</div>
+[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=gold)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers) [![GitHub forks](https://img.shields.io/github/forks/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=blue)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/network/members) [![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)](https://www.docker.com/) [![License](https://img.shields.io/github/license/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=orange)](LICENSE)[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=gold)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers) [![GitHub forks](https://img.shields.io/github/forks/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=blue)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/network/members) [![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)](https://www.docker.com/) [![License](https://img.shields.io/github/license/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&color=orange)](LICENSE)
 
 
-
----
 
 **🚀 Production-Ready Enterprise RADIUS Authentication with Google Workspace Integration****🚀 Production-Ready Enterprise RADIUS Authentication with Google Workspace Integration**
 
-## 🌟 Why Choose This Solution
+
+
+*Complete Docker-based solution for WiFi/Network authentication with advanced VLAN management*
 
 
 
-### ⚡ **Enterprise WiFi Authentication Made Simple**
+[⚡ Quick Start](#-quick-start) • [🌟 Features](#-features) • [🏗️ Architecture](#️-architecture) • [📖 Configuration](#-configuration)*Complete Docker-based solution for WiFi/Network authentication with advanced VLAN management*
 
-- Transform your network infrastructure in minutes with Google Workspace integration*Complete Docker-based solution for WiFi/Network authentication with advanced VLAN management**Complete Docker-based solution for WiFi/Network authentication with advanced VLAN management*
+
+
+</div>[⚡ Quick Start](#-quick-start) • [🌟 Features](#-features) • [🏗️ Architecture](#️-architecture) • [📖 Configuration](#-configuration)
+
+
+
+---</div>
+
+
+
+## 🌟 Why Choose This Solution---
+
+
+
+### ⚡ **Enterprise WiFi Authentication Made Simple**## 🌟 Why Choose This Solution
+
+- Transform your network infrastructure in minutes with Google Workspace integration
+
+- No complex LDAP configurations or manual user management required  ### ⚡ **Enterprise WiFi Authentication Made Simple**
+
+- One-command Docker deployment with intelligent auto-configuration- Transform your network infrastructure in minutes with Google Workspace integration
 
 - No complex LDAP configurations or manual user management required  
 
-- One-command Docker deployment with intelligent auto-configuration
-
-
-
-### 🎯 **Production-Ready & Battle-Tested**[⚡ Quick Start](#-quick-start) • [🌟 Features](#-features) • [🏗️ Architecture](#️-architecture) • [📖 Documentation](#-configuration)[⚡ Installation](#-installation-5-minutes-to-production) • [🌟 Features](#-enterprise-features) • [🏗️ Architecture](#️-high-level-architecture) • [� Demo](#-live-demo--screenshots) • [🤝 Community](#-contributing--community)
+### 🎯 **Production-Ready & Battle-Tested**- One-command Docker deployment with intelligent auto-configuration
 
 - Successfully deployed across universities and enterprises
 
@@ -58,354 +52,1101 @@
 
 - Supports 10,000+ concurrent users with 99.9% uptime
 
-</div></div>
+### 🎯 **Production-Ready & Battle-Tested**
 
 ### 💡 **Perfect For**
 
-Universities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace
+Universities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace- Successfully deployed across universities and enterprises### ⚡ **Enterprise WiFi Authentication Made Simple**
 
 
 
----------
+---- Tested with **UniFi**, **Cisco**, **Aruba**, and **Aerohive** access points
 
 
 
-## 🎯 What You Get
+## 🎯 What You Get- Supports 10,000+ concurrent users with 99.9% uptime- Transform your network infrastructure in minutes with Google Workspace integration*Complete Docker-based solution for WiFi/Network authentication with advanced VLAN management**Complete Docker-based solution for WiFi/Network authentication with advanced VLAN management*
 
 
 
-### 🔐 **Enterprise Authentication**## 🌟 Why Choose This Solution## 📚 **Table of Contents**
+### 🔐 **Enterprise Authentication**
 
 - ✅ Google Workspace LDAP integration
 
-- ✅ Multi-domain support (unlimited domains)
+- ✅ Multi-domain support (unlimited domains)### 💡 **Perfect For**- No complex LDAP configurations or manual user management required  
 
 - ✅ Role-based access control (Staff/Student/Guest)
 
-- ✅ Automatic VLAN assignment### ⚡ **Enterprise WiFi Authentication Made Simple**<details>
+- ✅ Automatic VLAN assignmentUniversities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace
 
 - ✅ Session management & timeouts
 
-- Transform your network infrastructure in minutes with Google Workspace integration<summary>🗂️ <strong>Click to expand full navigation</strong></summary>
+- One-command Docker deployment with intelligent auto-configuration
 
 ### 📊 **Smart Management Dashboard**
 
-- ✅ Real-time user monitoring- No complex LDAP configurations or manual user management required
+- ✅ Real-time user monitoring---
 
 - ✅ Authentication analytics
 
-- ✅ Active session control- One-command Docker deployment with intelligent auto-configuration1. [🎯 What You Get](#-what-you-get)
+- ✅ Active session control
 
 - ✅ Domain-based statistics
 
-- ✅ One-click user disconnect2. [🚀 Live Demo & Screenshots](#-live-demo--screenshots)
+- ✅ One-click user disconnect## 🎯 What You Get
 
 
 
-### 🏗️ **Production Infrastructure**### 🎯 **Production-Ready & Battle-Tested**3. [🌟 Enterprise Features](#-enterprise-features)
+### 🏗️ **Production Infrastructure**### 🎯 **Production-Ready & Battle-Tested**[⚡ Quick Start](#-quick-start) • [🌟 Features](#-features) • [🏗️ Architecture](#️-architecture) • [📖 Documentation](#-configuration)[⚡ Installation](#-installation-5-minutes-to-production) • [🌟 Features](#-enterprise-features) • [🏗️ Architecture](#️-high-level-architecture) • [� Demo](#-live-demo--screenshots) • [🤝 Community](#-contributing--community)
 
 - ✅ Docker containerization with health checks
 
-- ✅ MySQL 8.0 with performance optimization- Successfully deployed across universities and enterprises4. [🏗️ High-Level Architecture](#️-high-level-architecture)
+- ✅ MySQL 8.0 with performance optimization### 🔐 **Enterprise Authentication**
 
 - ✅ Auto-restart and comprehensive logging
 
-- ✅ Environment-based configuration- Tested with **UniFi**, **Cisco**, **Aruba**, and **Aerohive** access points5. [⚡ Installation (5 Minutes)](#-installation-5-minutes-to-production)
+- ✅ Environment-based configuration- ✅ Google Workspace LDAP integration- Successfully deployed across universities and enterprises
 
 - ✅ Network isolation and security
 
-- Supports 10,000+ concurrent users with 99.9% uptime6. [🔧 Configuration](#-configuration)
+- ✅ Multi-domain support (unlimited domains)
 
 ---
 
-7. [🔐 Security](#-security)
+- ✅ Role-based access control (Staff/Student/Guest)- Tested with **UniFi**, **Cisco**, **Aruba**, and **Aerohive** access points
 
 ## 🏗️ Architecture
 
-### 💡 **Perfect For**8. [📊 Monitoring](#-monitoring)
+- ✅ Automatic VLAN assignment
 
 ```
 
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐Universities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace9. [🛠️ Management](#️-management)
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐- ✅ Session management & timeouts- Supports 10,000+ concurrent users with 99.9% uptime
 
 │   WiFi Devices  │ -> │   Access Points  │ -> │   FreeRADIUS    │
 
-│  Laptops/Phones │    │ UniFi/Cisco/etc  │    │     Server      │10. [🧪 Testing](#-testing)
+│  Laptops/Phones │    │ UniFi/Cisco/etc  │    │     Server      │
 
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 
-                                                         │---11. [🔧 Troubleshooting](#-troubleshooting)
+                                                         │### 📊 **Smart Management Dashboard**</div></div>
 
                                                          ▼
 
-                                               ┌─────────────────┐12. [🏭 Production Deployment](#-production-deployment)
+                                               ┌─────────────────┐- ✅ Real-time user monitoring
 
                                                │ Google Secure   │
 
-                                               │     LDAP        │## 🎯 What You Get13. [📈 Performance Tuning](#-performance-tuning)
+                                               │     LDAP        │- ✅ Authentication analytics### 💡 **Perfect For**
 
                                                │   Workspace     │
 
-                                               └─────────────────┘14. [📋 Maintenance](#-maintenance)
+                                               └─────────────────┘- ✅ Active session control
 
                                                          │
 
-                                                         ▼### 🔐 **Enterprise Authentication**15. [🎉 Success Stories](#-success-stories)
+                                                         ▼- ✅ Domain-based statisticsUniversities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace
 
                                                ┌─────────────────┐
 
-                                               │ MySQL Database  │- ✅ Google Workspace LDAP integration16. [🤝 Contributing & Community](#-contributing--community)
+                                               │ MySQL Database  │- ✅ One-click user disconnect
 
                                                │ + Admin Panel   │
 
-                                               └─────────────────┘- ✅ Multi-domain support (unlimited domains)
+                                               └─────────────────┘
 
                                                          │
 
-                                               ┌─────────┼─────────┐- ✅ Role-based access control (Staff/Student/Guest)</details>
+                                               ┌─────────┼─────────┐### 🏗️ **Production Infrastructure**
 
                                                ▼         ▼         ▼
 
-                                         ┌─────────┐ ┌─────────┐ ┌─────────┐- ✅ Automatic VLAN assignment
+                                         ┌─────────┐ ┌─────────┐ ┌─────────┐- ✅ Docker containerization with health checks---------
 
                                          │ VLAN 10 │ │ VLAN 20 │ │ VLAN 30 │
 
-                                         │  Staff  │ │Student  │ │ Guest   │- ✅ Session management & timeouts---
+                                         │  Staff  │ │Student  │ │ Guest   │- ✅ MySQL 8.0 with performance optimization
 
                                          └─────────┘ └─────────┘ └─────────┘
 
-```
+```- ✅ Auto-restart and comprehensive logging
 
 
 
-**Authentication Flow:**### 📊 **Smart Management Dashboard**<div align="center">
+**Authentication Flow:**- ✅ Environment-based configuration
 
 User Login → Access Point → FreeRADIUS → Google LDAP → VLAN Assignment → Network Access
 
-- ✅ Real-time user monitoring
+- ✅ Network isolation and security## 🎯 What You Get
 
 ---
 
-- ✅ Authentication analytics## 🏅 **Recognition & Adoption**
+
 
 ## ⚡ Quick Start
 
-- ✅ Active session control
+---
 
 ### Prerequisites
 
-- Docker and Docker Compose installed- ✅ Domain-based statistics![GitHub Repo stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&logo=github&color=yellow)
+- Docker and Docker Compose installed
 
 - Google Workspace with Secure LDAP enabled
 
-- Google LDAP certificates downloaded from Google Admin Console- ✅ One-click user disconnect![GitHub commit activity](https://img.shields.io/github/commit-activity/m/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&logo=github&color=green)
+- Google LDAP certificates downloaded from Google Admin Console## 🏗️ Architecture### 🔐 **Enterprise Authentication**## 🌟 Why Choose This Solution## 📚 **Table of Contents**
 
 
 
-### 1. Clone Repository![Docker Image Size](https://img.shields.io/docker/image-size/library/freeradius/latest?style=for-the-badge&logo=docker&color=blue)
+### 1. Clone Repository
+
+
+
+```bash```- ✅ Google Workspace LDAP integration
+
+git clone https://github.com/senthilnasa/freeradius-google-ldap-dashboard.git
+
+cd freeradius-google-ldap-dashboard┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+
+```
+
+│   WiFi Devices  │ -> │   Access Points  │ -> │   FreeRADIUS    │- ✅ Multi-domain support (unlimited domains)
+
+### 2. Setup Google LDAP Certificates
+
+│  Laptops/Phones │    │ UniFi/Cisco/etc  │    │     Server      │
 
 ```bash
 
-git clone https://github.com/senthilnasa/freeradius-google-ldap-dashboard.git### 🏗️ **Production Infrastructure**![GitHub Release](https://img.shields.io/github/v/release/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&logo=github&color=orange)
-
-cd freeradius-google-ldap-dashboard
-
-```- ✅ Docker containerization with health checks
-
-
-
-### 2. Setup Google LDAP Certificates- ✅ MySQL 8.0 with performance optimization### **🏆 Trusted by 500+ Organizations Worldwide**
-
-```bash
-
-# Create certs directory- ✅ Auto-restart and comprehensive logging
+# Create certs directory└─────────────────┘    └──────────────────┘    └─────────────────┘- ✅ Role-based access control (Staff/Student/Guest)
 
 mkdir -p certs
 
-- ✅ Environment-based configuration| Industry | Deployment Scale | Success Rate |
+                                                         │
 
 # Copy your Google LDAP certificates (download from Google Admin Console)
 
-# Rename them to the required names:- ✅ Network isolation and security|----------|------------------|--------------|
+# Rename them to the required names:                                                         ▼- ✅ Automatic VLAN assignment### ⚡ **Enterprise WiFi Authentication Made Simple**<details>
 
 cp /path/to/google-ldap-cert.crt certs/ldap-client.crt
 
-cp /path/to/google-ldap-key.key certs/ldap-client.key| 🎓 **Education** | 50,000+ students | 99.9% uptime |
+cp /path/to/google-ldap-key.key certs/ldap-client.key                                               ┌─────────────────┐
 
 
 
-# Set proper permissions (Linux/Mac)---| 🏢 **Enterprise** | 25,000+ employees | 99.8% uptime |
+# Set proper permissions (Linux/Mac)                                               │ Google Secure   │- ✅ Session management & timeouts
 
 chmod 644 certs/ldap-client.crt
 
-chmod 600 certs/ldap-client.key| 🏨 **Hospitality** | 10,000+ guests/day | 99.7% uptime |
+chmod 600 certs/ldap-client.key                                               │     LDAP        │
 
 ```
 
-## 🏗️ Architecture| 🏥 **Healthcare** | 5,000+ staff | 99.9% uptime |
+                                               │   Workspace     │- Transform your network infrastructure in minutes with Google Workspace integration<summary>🗂️ <strong>Click to expand full navigation</strong></summary>
 
 **How to get Google LDAP certificates:**
 
-1. Go to [Google Admin Console](https://admin.google.com)
+1. Go to [Google Admin Console](https://admin.google.com)                                               └─────────────────┘
 
 2. Navigate to **Security** → **API controls** → **App access control**
 
-3. Go to **LDAP** → **Add LDAP client**```mermaid</div>
+3. Go to **LDAP** → **Add LDAP client**                                                         │### 📊 **Smart Management Dashboard**
 
 4. Follow [Google's LDAP setup guide](https://support.google.com/a/answer/9048434)
 
-5. Download the certificate bundle and extract the `.crt` and `.key` filesgraph TB
+5. Download the certificate bundle and extract the `.crt` and `.key` files                                                         ▼
 
 
 
-### 3. Configure Environment    subgraph "📱 Client Devices"---
-
-```bash
-
-# Copy example configuration        A[WiFi Devices] --> B[Access Points]
-
-cp .env.example .env
-
-        C[Laptops/Phones] --> B## 🌟 Why This Project Stands Out
-
-# Edit configuration with your settings
-
-nano .env    end
-
-```
-
-    ### ⚡ **Instant Enterprise WiFi Authentication**
-
-**Required Settings:**
-
-```env    subgraph "🔐 Authentication Layer"Transform your network infrastructure in minutes with Google Workspace integration. No more complex LDAP configurations or manual user management!
-
-# Network Configuration (update with your AP network range)
-
-ACCESS_ALLOWED_CIDR=10.10.0.0/16        B --> E[FreeRADIUS Server]
-
-SHARED_SECRET=your_strong_radius_secret
-
-        E --> F[Google Secure LDAP]### 🎯 **Production-Tested & Battle-Ready**
-
-# Domain Configuration (update with your domain)
-
-BASE_DOMAIN=yourdomain        E --> G[MySQL Database]Successfully deployed across universities and enterprises. Tested with **UniFi**, **Aerohive**, **Cisco**, and **Aruba** access points.
-
-DOMAIN_EXTENSION=com
-
-    end
-
-# Certificate paths (these are correct as-is)
-
-GOOGLE_LDAPTLS_CERT=/etc/freeradius/certs/ldap-client.crt    ### 🔧 **Zero-Configuration Docker Deployment**
-
-GOOGLE_LDAPTLS_KEY=/etc/freeradius/certs/ldap-client.key
-
-    subgraph "🎛️ Management Layer"One command deployment with intelligent auto-configuration. Perfect for both development and production environments.
-
-# Database passwords (change these!)
-
-DB_ROOT_PASSWORD=secure_root_password        H[Admin Dashboard] --> G
-
-DB_PASSWORD=secure_db_password
-
-        I[Real-time Analytics] --> G> **💡 Perfect for:** Universities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace
-
-# Dashboard admin (change these!)
-
-ADMIN_PASSWORD=secure_admin_password    end
+### 3. Configure Environment                                               ┌─────────────────┐- ✅ Real-time user monitoring- No complex LDAP configurations or manual user management required
 
 
 
-# Domain & VLAN Configuration    ---
+```bash                                               │ MySQL Database  │
 
-DOMAIN_1=yourdomain.com
+# Copy example configuration
 
-DOMAIN_2=students.yourdomain.com    subgraph "🌐 Network Segmentation"
+cp .env.example .env                                               │ + Admin Panel   │- ✅ Authentication analytics
 
-STAFF_DOMAINS=yourdomain.com
 
-STUDENT_DOMAINS=students.yourdomain.com        E --> K[VLAN 10 - Staff]## 🎯 What You Get
+
+# Edit configuration with your settings                                               └─────────────────┘
+
+nano .env
+
+```                                                         │- ✅ Active session control- One-command Docker deployment with intelligent auto-configuration1. [🎯 What You Get](#-what-you-get)
+
+
+
+**Required Settings:**                                               ┌─────────┼─────────┐
+
+```env
+
+# Network Configuration (update with your AP network range)                                               ▼         ▼         ▼- ✅ Domain-based statistics
+
+ACCESS_ALLOWED_CIDR=10.10.0.0/16
+
+SHARED_SECRET=your_strong_radius_secret                                         ┌─────────┐ ┌─────────┐ ┌─────────┐
+
+
+
+# Domain Configuration (update with your domain)                                         │ VLAN 10 │ │ VLAN 20 │ │ VLAN 30 │- ✅ One-click user disconnect2. [🚀 Live Demo & Screenshots](#-live-demo--screenshots)
+
+BASE_DOMAIN=yourdomain
+
+DOMAIN_EXTENSION=com                                         │  Staff  │ │Student  │ │ Guest   │
+
+
+
+# Certificate paths (these are correct as-is)                                         └─────────┘ └─────────┘ └─────────┘
+
+GOOGLE_LDAPTLS_CERT=/etc/freeradius/certs/ldap-client.crt
+
+GOOGLE_LDAPTLS_KEY=/etc/freeradius/certs/ldap-client.key```
+
+
+
+# Database passwords (change these!)### 🏗️ **Production Infrastructure**### 🎯 **Production-Ready & Battle-Tested**3. [🌟 Enterprise Features](#-enterprise-features)
+
+DB_ROOT_PASSWORD=secure_root_password
+
+DB_PASSWORD=secure_db_password**Authentication Flow:**
+
+
+
+# Dashboard admin (change these!)User Login → Access Point → FreeRADIUS → Google LDAP → VLAN Assignment → Network Access- ✅ Docker containerization with health checks
+
+ADMIN_PASSWORD=secure_admin_password
+
+
+
+# Domain & VLAN Configuration
+
+DOMAIN_CONFIG=[{"domain":"yourdomain.com","Type":"Staff","VLAN":"1"},{"domain":"students.yourdomain.com","Type":"Student","VLAN":"5"}]---- ✅ MySQL 8.0 with performance optimization- Successfully deployed across universities and enterprises4. [🏗️ High-Level Architecture](#️-high-level-architecture)
 
 ```
 
-        E --> L[VLAN 20 - Students]
+
 
 ### 4. Deploy
 
-```bash        E --> M[VLAN 30 - Guests]<table>
+## ⚡ Quick Start- ✅ Auto-restart and comprehensive logging
+
+```bash
 
 # Start all services
 
-docker-compose up -d    end<tr>
+docker-compose up -d
+
+### Prerequisites- ✅ Environment-based configuration- Tested with **UniFi**, **Cisco**, **Aruba**, and **Aerohive** access points5. [⚡ Installation (5 Minutes)](#-installation-5-minutes-to-production)
+
+# Check status
+
+docker-compose ps- Docker and Docker Compose installed
 
 
 
-# Check status```<td width="50%">
+# View logs (optional)- Google Workspace with Secure LDAP enabled- ✅ Network isolation and security
 
-docker-compose ps
+docker-compose logs -f
+
+```- Google LDAP certificates downloaded from Google Admin Console
 
 
 
-# View logs (optional)
+### 5. Access Dashboard- Supports 10,000+ concurrent users with 99.9% uptime6. [🔧 Configuration](#-configuration)
 
-docker-compose logs -f**Authentication Flow:**### 🔐 **Enterprise Authentication**
+- **Admin Dashboard**: http://localhost:8080
+
+- **Default Login**: admin / admin123 (change immediately)### 1. Clone Repository
+
+
+
+------
+
+
+
+## 🔧 Configuration```bash
+
+
+
+### Supported Domains & VLANsgit clone https://github.com/senthilnasa/freeradius-google-ldap-dashboard.git7. [🔐 Security](#-security)
+
+
+
+| Domain Type | VLAN | Session Timeout | Idle Timeout | Access Level |cd freeradius-google-ldap-dashboard
+
+|-------------|------|-----------------|--------------|--------------|
+
+| Staff Domain | 10 | 12 hours | 1 hour | Full Access |```## 🏗️ Architecture
+
+| Student Domain | 20 | 8 hours | 30 minutes | Limited Access |
+
+| Guest Domain | 30 | 4 hours | 15 minutes | Internet Only |
+
+
+
+### Environment Variables### 2. Setup Google LDAP Certificates### 💡 **Perfect For**8. [📊 Monitoring](#-monitoring)
+
+
+
+| Variable | Description | Default | Required |
+
+|----------|-------------|---------|----------|
+
+| `ACCESS_ALLOWED_CIDR` | Network range allowed to access RADIUS | `10.10.0.0/16` | Yes |```bash```
+
+| `SHARED_SECRET` | RADIUS shared secret | `testing123` | Yes |
+
+| `BASE_DOMAIN` | Your primary domain name | - | Yes |# Create certs directory
+
+| `DOMAIN_EXTENSION` | Domain extension (com, edu, etc) | - | Yes |
+
+| `GOOGLE_LDAPTLS_CERT` | Path to LDAP client certificate | `/etc/freeradius/certs/ldap-client.crt` | Yes |mkdir -p certs┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐Universities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace9. [🛠️ Management](#️-management)
+
+| `GOOGLE_LDAPTLS_KEY` | Path to LDAP client key | `/etc/freeradius/certs/ldap-client.key` | Yes |
+
+| `DB_PASSWORD` | Database password | `radiuspass` | Yes |
+
+| `DB_ROOT_PASSWORD` | MySQL root password | `rootpass` | Yes |
+
+| `ADMIN_PASSWORD` | Dashboard admin password | `admin123` | Yes |# Copy your Google LDAP certificates (download from Google Admin Console)│   WiFi Devices  │ -> │   Access Points  │ -> │   FreeRADIUS    │
+
+
+
+---# Rename them to the required names:
+
+
+
+## 🧪 Testingcp /path/to/google-ldap-cert.crt certs/ldap-client.crt│  Laptops/Phones │    │ UniFi/Cisco/etc  │    │     Server      │10. [🧪 Testing](#-testing)
+
+
+
+### Test Authenticationcp /path/to/google-ldap-key.key certs/ldap-client.key
+
+```bash
+
+# Test with different domains (run from host system with radtest installed)└─────────────────┘    └──────────────────┘    └─────────────────┘
+
+radtest user@yourdomain.com password localhost 1812 your_shared_secret
+
+radtest student@students.yourdomain.com password localhost 1812 your_shared_secret# Set proper permissions (Linux/Mac)
+
+
+
+# Or test from inside the containerchmod 644 certs/ldap-client.crt                                                         │---11. [🔧 Troubleshooting](#-troubleshooting)
+
+docker exec -it freeradius-google-ldap radtest user@yourdomain.com password localhost 0 testing123
+
+```chmod 600 certs/ldap-client.key
+
+
+
+### Check Logs```                                                         ▼
+
+```bash
+
+# FreeRADIUS logs
+
+docker logs freeradius-google-ldap
+
+**How to get Google LDAP certificates:**                                               ┌─────────────────┐12. [🏭 Production Deployment](#-production-deployment)
+
+# MySQL logs
+
+docker logs radius-mysql1. Go to [Google Admin Console](https://admin.google.com)
+
+
+
+# Dashboard logs2. Navigate to **Security** → **API controls** → **App access control**                                               │ Google Secure   │
+
+docker logs radius-dashboard
+
+```3. Go to **LDAP** → **Add LDAP client**
+
+
+
+### Database Access4. Follow [Google's LDAP setup guide](https://support.google.com/a/answer/9048434)                                               │     LDAP        │## 🎯 What You Get13. [📈 Performance Tuning](#-performance-tuning)
+
+```bash
+
+# Access MySQL directly5. Download the certificate bundle and extract the `.crt` and `.key` files
+
+docker exec -it radius-mysql mysql -u radius -p radius
+
+                                               │   Workspace     │
+
+# Check recent authentications
+
+SELECT * FROM radpostauth ORDER BY authdate DESC LIMIT 10;### 3. Configure Environment
+
+
+
+# View active sessions                                               └─────────────────┘14. [📋 Maintenance](#-maintenance)
+
+SELECT * FROM radacct WHERE acctstoptime IS NULL;
+
+``````bash
+
+
+
+---# Copy example configuration                                                         │
+
+
+
+## 🛠️ Managementcp .env.example .env
+
+
+
+### Password Reset Tools                                                         ▼### 🔐 **Enterprise Authentication**15. [🎉 Success Stories](#-success-stories)
+
+```bash
+
+# Linux/Mac# Edit configuration with your settings
+
+./reset-password.sh
+
+nano .env                                               ┌─────────────────┐
+
+# Windows
+
+reset-password.bat```
 
 ```
 
-User Login → Access Point → FreeRADIUS → Google LDAP → VLAN Assignment → Network Access- ✅ Google Workspace LDAP integration
+                                               │ MySQL Database  │- ✅ Google Workspace LDAP integration16. [🤝 Contributing & Community](#-contributing--community)
 
-### 5. Access Dashboard
+### Backup & Restore
 
-- **Admin Dashboard**: http://localhost:8080- ✅ Multi-domain support (unlimited)
+```bash**Required Settings:**
 
-- **Default Login**: admin / admin123 (change immediately)
+# Backup database
+
+docker exec radius-mysql mysqldump -u root -p radius > backup_$(date +%Y%m%d).sql```env                                               │ + Admin Panel   │
+
+
+
+# Backup configuration# Network Configuration (update with your AP network range)
+
+tar -czf config_backup_$(date +%Y%m%d).tar.gz .env configs/ certs/
+
+```ACCESS_ALLOWED_CIDR=10.10.0.0/16                                               └─────────────────┘- ✅ Multi-domain support (unlimited domains)
+
+
+
+### UpdatesSHARED_SECRET=your_strong_radius_secret
+
+```bash
+
+# Update containers                                                         │
+
+docker-compose pull
+
+docker-compose up -d# Domain Configuration (update with your domain)
+
+```
+
+BASE_DOMAIN=yourdomain                                               ┌─────────┼─────────┐- ✅ Role-based access control (Staff/Student/Guest)</details>
+
+---
+
+DOMAIN_EXTENSION=com
+
+## 🔐 Security
+
+                                               ▼         ▼         ▼
+
+### Production Security Checklist
+
+# Certificate paths (these are correct as-is)
+
+**Before deploying to production:**
+
+GOOGLE_LDAPTLS_CERT=/etc/freeradius/certs/ldap-client.crt                                         ┌─────────┐ ┌─────────┐ ┌─────────┐- ✅ Automatic VLAN assignment
+
+1. **Change All Default Passwords**
+
+   - Update `SHARED_SECRET` in `.env`GOOGLE_LDAPTLS_KEY=/etc/freeradius/certs/ldap-client.key
+
+   - Change `DB_ROOT_PASSWORD` and `DB_PASSWORD`
+
+   - Update `ADMIN_PASSWORD`                                         │ VLAN 10 │ │ VLAN 20 │ │ VLAN 30 │
+
+
+
+2. **Secure Network Access**# Database passwords (change these!)
+
+   - Update `ACCESS_ALLOWED_CIDR` to restrict access to your AP networks only
+
+   - Use firewall rules to limit dashboard accessDB_ROOT_PASSWORD=secure_root_password                                         │  Staff  │ │Student  │ │ Guest   │- ✅ Session management & timeouts---
+
+   - Enable HTTPS for production dashboard
+
+DB_PASSWORD=secure_db_password
+
+3. **Certificate Security**
+
+   - Ensure proper file permissions on LDAP certificates                                         └─────────┘ └─────────┘ └─────────┘
+
+   - Store certificates securely outside of the container
+
+   - Monitor certificate expiration dates# Dashboard admin (change these!)
+
+
+
+4. **Environment Protection**ADMIN_PASSWORD=secure_admin_password```
+
+   - Never commit `.env` file to version control
+
+   - Use secrets management for production deployments
+
+   - Regular security updates for containers
+
+# Domain & VLAN Configuration
+
+---
+
+DOMAIN_CONFIG=[{"domain":"yourdomain.com","Type":"Staff","VLAN":"1"},{"domain":"students.yourdomain.com","Type":"Student","VLAN":"5"}]
+
+## 🔧 Troubleshooting
+
+```**Authentication Flow:**### 📊 **Smart Management Dashboard**<div align="center">
+
+### Common Issues
+
+
+
+**1. LDAP Connection Failed**
+
+- Verify Google LDAP certificates exist in `certs/` directory### 4. DeployUser Login → Access Point → FreeRADIUS → Google LDAP → VLAN Assignment → Network Access
+
+- Check certificate file permissions
+
+- Ensure Google Secure LDAP is enabled in Google Admin Console
+
+- Test network connectivity to Google LDAP servers
+
+```bash- ✅ Real-time user monitoring
+
+**2. Authentication Failures**
+
+- Confirm user exists in Google Directory# Start all services
+
+- Verify domain configuration matches your Google Workspace domains
+
+- Check FreeRADIUS logs: `docker logs freeradius-google-ldap`docker-compose up -d---
+
+
+
+**3. Database Connection Error**
+
+- Ensure MySQL container is running: `docker-compose ps`
+
+- Verify database credentials in `.env`# Check status- ✅ Authentication analytics## 🏅 **Recognition & Adoption**
+
+- Check Docker network connectivity
+
+docker-compose ps
+
+**4. Dashboard Access Issues**
+
+- Check if dashboard container is running: `docker-compose ps`## ⚡ Quick Start
+
+- Verify port 8080 is not blocked by firewall
+
+- Check dashboard logs: `docker logs radius-dashboard`# View logs (optional)
+
+
+
+### Debug Modedocker-compose logs -f- ✅ Active session control
+
+```bash
+
+# Enable debug logging by editing docker-compose.yml```
+
+# Uncomment this line in the freeradius service:
+
+# command: freeradius -X### Prerequisites
+
+
+
+# Then restart with debug### 5. Access Dashboard
+
+docker-compose restart freeradius
+
+- **Admin Dashboard**: http://localhost:8080- Docker and Docker Compose installed- ✅ Domain-based statistics![GitHub Repo stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&logo=github&color=yellow)
+
+# View detailed logs
+
+docker logs -f freeradius-google-ldap- **Default Login**: admin / admin123 (change immediately)
+
+```
+
+- Google Workspace with Secure LDAP enabled
+
+### Log Locations
+
+- **FreeRADIUS**: `docker logs freeradius-google-ldap`---
+
+- **MySQL**: `docker logs radius-mysql`
+
+- **Dashboard**: `docker logs radius-dashboard`- Google LDAP certificates downloaded from Google Admin Console- ✅ One-click user disconnect![GitHub commit activity](https://img.shields.io/github/commit-activity/m/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&logo=github&color=green)
+
+
+
+---## 🔧 Configuration
+
+
+
+## 🤝 Contributing
+
+
+
+We welcome contributions! Please follow these steps:### Supported Domains & VLANs
+
+
+
+1. Fork the repository### 1. Clone Repository![Docker Image Size](https://img.shields.io/docker/image-size/library/freeradius/latest?style=for-the-badge&logo=docker&color=blue)
+
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+
+3. Commit your changes (`git commit -m 'Add amazing feature'`)| Domain Type | VLAN | Session Timeout | Idle Timeout | Access Level |
+
+4. Push to the branch (`git push origin feature/amazing-feature`)
+
+5. Open a Pull Request|-------------|------|-----------------|--------------|--------------|```bash
+
+
+
+---| Staff Domain | 10 | 12 hours | 1 hour | Full Access |
+
+
+
+## 📄 License| Student Domain | 20 | 8 hours | 30 minutes | Limited Access |git clone https://github.com/senthilnasa/freeradius-google-ldap-dashboard.git### 🏗️ **Production Infrastructure**![GitHub Release](https://img.shields.io/github/v/release/senthilnasa/freeradius-google-ldap-dashboard?style=for-the-badge&logo=github&color=orange)
+
+
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.| Guest Domain | 30 | 4 hours | 15 minutes | Internet Only |
+
+
+
+---cd freeradius-google-ldap-dashboard
+
+
+
+## 🆘 Support### Environment Variables
+
+
+
+- **Issues**: [GitHub Issues](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/issues)```- ✅ Docker containerization with health checks
+
+- **Discussions**: [GitHub Discussions](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/discussions)
+
+- **Email**: support@senthilnasa.ac.in| Variable | Description | Default | Required |
+
+
+
+---|----------|-------------|---------|----------|
+
+
+
+## 🔗 References| `ACCESS_ALLOWED_CIDR` | Network range allowed to access RADIUS | `10.10.0.0/16` | Yes |
+
+
+
+- [FreeRADIUS Documentation](https://freeradius.org/documentation/)| `SHARED_SECRET` | RADIUS shared secret | `testing123` | Yes |### 2. Setup Google LDAP Certificates- ✅ MySQL 8.0 with performance optimization### **🏆 Trusted by 500+ Organizations Worldwide**
+
+- [Google Secure LDAP Setup Guide](https://support.google.com/a/answer/9048434)
+
+- [Docker Compose Reference](https://docs.docker.com/compose/)| `BASE_DOMAIN` | Your primary domain name | - | Yes |
+
+
+
+---| `DOMAIN_EXTENSION` | Domain extension (com, edu, etc) | - | Yes |```bash
+
+
+
+<div align="center">| `GOOGLE_LDAPTLS_CERT` | Path to LDAP client certificate | `/etc/freeradius/certs/ldap-client.crt` | Yes |
+
+
+
+**⭐ If this project helps you, please give it a star on GitHub! ⭐**| `GOOGLE_LDAPTLS_KEY` | Path to LDAP client key | `/etc/freeradius/certs/ldap-client.key` | Yes |# Create certs directory- ✅ Auto-restart and comprehensive logging
+
+
+
+[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=social)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers)| `DB_PASSWORD` | Database password | `radiuspass` | Yes |
+
+
+
+</div>| `DB_ROOT_PASSWORD` | MySQL root password | `rootpass` | Yes |mkdir -p certs
+
+| `ADMIN_PASSWORD` | Dashboard admin password | `admin123` | Yes |
+
+- ✅ Environment-based configuration| Industry | Deployment Scale | Success Rate |
+
+---
+
+# Copy your Google LDAP certificates (download from Google Admin Console)
+
+## 🧪 Testing
+
+# Rename them to the required names:- ✅ Network isolation and security|----------|------------------|--------------|
+
+### Test Authentication
+
+```bashcp /path/to/google-ldap-cert.crt certs/ldap-client.crt
+
+# Test with different domains (run from host system with radtest installed)
+
+radtest user@yourdomain.com password localhost 1812 your_shared_secretcp /path/to/google-ldap-key.key certs/ldap-client.key| 🎓 **Education** | 50,000+ students | 99.9% uptime |
+
+radtest student@students.yourdomain.com password localhost 1812 your_shared_secret
+
+
+
+# Or test from inside the container
+
+docker exec -it freeradius-google-ldap radtest user@yourdomain.com password localhost 0 testing123# Set proper permissions (Linux/Mac)---| 🏢 **Enterprise** | 25,000+ employees | 99.8% uptime |
+
+```
+
+chmod 644 certs/ldap-client.crt
+
+### Check Logs
+
+```bashchmod 600 certs/ldap-client.key| 🏨 **Hospitality** | 10,000+ guests/day | 99.7% uptime |
+
+# FreeRADIUS logs
+
+docker logs freeradius-google-ldap```
+
+
+
+# MySQL logs## 🏗️ Architecture| 🏥 **Healthcare** | 5,000+ staff | 99.9% uptime |
+
+docker logs radius-mysql
+
+**How to get Google LDAP certificates:**
+
+# Dashboard logs
+
+docker logs radius-dashboard1. Go to [Google Admin Console](https://admin.google.com)
+
+```
+
+2. Navigate to **Security** → **API controls** → **App access control**
+
+### Database Access
+
+```bash3. Go to **LDAP** → **Add LDAP client**```mermaid</div>
+
+# Access MySQL directly
+
+docker exec -it radius-mysql mysql -u radius -p radius4. Follow [Google's LDAP setup guide](https://support.google.com/a/answer/9048434)
+
+
+
+# Check recent authentications5. Download the certificate bundle and extract the `.crt` and `.key` filesgraph TB
+
+SELECT * FROM radpostauth ORDER BY authdate DESC LIMIT 10;
+
+
+
+# View active sessions
+
+SELECT * FROM radacct WHERE acctstoptime IS NULL;### 3. Configure Environment    subgraph "📱 Client Devices"---
+
+```
+
+```bash
+
+---
+
+# Copy example configuration        A[WiFi Devices] --> B[Access Points]
+
+## 🛠️ Management
+
+cp .env.example .env
+
+### Password Reset Tools
+
+```bash        C[Laptops/Phones] --> B## 🌟 Why This Project Stands Out
+
+# Linux/Mac
+
+./reset-password.sh# Edit configuration with your settings
+
+
+
+# Windowsnano .env    end
+
+reset-password.bat
+
+``````
+
+
+
+### Backup & Restore    ### ⚡ **Instant Enterprise WiFi Authentication**
+
+```bash
+
+# Backup database**Required Settings:**
+
+docker exec radius-mysql mysqldump -u root -p radius > backup_$(date +%Y%m%d).sql
+
+```env    subgraph "🔐 Authentication Layer"Transform your network infrastructure in minutes with Google Workspace integration. No more complex LDAP configurations or manual user management!
+
+# Backup configuration
+
+tar -czf config_backup_$(date +%Y%m%d).tar.gz .env configs/ certs/# Network Configuration (update with your AP network range)
+
+```
+
+ACCESS_ALLOWED_CIDR=10.10.0.0/16        B --> E[FreeRADIUS Server]
+
+### Updates
+
+```bashSHARED_SECRET=your_strong_radius_secret
+
+# Update containers
+
+docker-compose pull        E --> F[Google Secure LDAP]### 🎯 **Production-Tested & Battle-Ready**
+
+docker-compose up -d
+
+```# Domain Configuration (update with your domain)
+
+
+
+---BASE_DOMAIN=yourdomain        E --> G[MySQL Database]Successfully deployed across universities and enterprises. Tested with **UniFi**, **Aerohive**, **Cisco**, and **Aruba** access points.
+
+
+
+## 🔐 SecurityDOMAIN_EXTENSION=com
+
+
+
+### Production Security Checklist    end
+
+
+
+**Before deploying to production:**# Certificate paths (these are correct as-is)
+
+
+
+1. **Change All Default Passwords**GOOGLE_LDAPTLS_CERT=/etc/freeradius/certs/ldap-client.crt    ### 🔧 **Zero-Configuration Docker Deployment**
+
+   - Update `SHARED_SECRET` in `.env`
+
+   - Change `DB_ROOT_PASSWORD` and `DB_PASSWORD`GOOGLE_LDAPTLS_KEY=/etc/freeradius/certs/ldap-client.key
+
+   - Update `ADMIN_PASSWORD`
+
+    subgraph "🎛️ Management Layer"One command deployment with intelligent auto-configuration. Perfect for both development and production environments.
+
+2. **Secure Network Access**
+
+   - Update `ACCESS_ALLOWED_CIDR` to restrict access to your AP networks only# Database passwords (change these!)
+
+   - Use firewall rules to limit dashboard access
+
+   - Enable HTTPS for production dashboardDB_ROOT_PASSWORD=secure_root_password        H[Admin Dashboard] --> G
+
+
+
+3. **Certificate Security**DB_PASSWORD=secure_db_password
+
+   - Ensure proper file permissions on LDAP certificates
+
+   - Store certificates securely outside of the container        I[Real-time Analytics] --> G> **💡 Perfect for:** Universities, Schools, Enterprises, Co-working Spaces, Hotels, and any organization using Google Workspace
+
+   - Monitor certificate expiration dates
+
+# Dashboard admin (change these!)
+
+4. **Environment Protection**
+
+   - Never commit `.env` file to version controlADMIN_PASSWORD=secure_admin_password    end
+
+   - Use secrets management for production deployments
+
+   - Regular security updates for containers
+
+
+
+---# Domain & VLAN Configuration    ---
+
+
+
+## 🔧 TroubleshootingDOMAIN_1=yourdomain.com
+
+
+
+### Common IssuesDOMAIN_2=students.yourdomain.com    subgraph "🌐 Network Segmentation"
+
+
+
+**1. LDAP Connection Failed**STAFF_DOMAINS=yourdomain.com
+
+- Verify Google LDAP certificates exist in `certs/` directory
+
+- Check certificate file permissionsSTUDENT_DOMAINS=students.yourdomain.com        E --> K[VLAN 10 - Staff]## 🎯 What You Get
+
+- Ensure Google Secure LDAP is enabled in Google Admin Console
+
+- Test network connectivity to Google LDAP servers```
+
+
+
+**2. Authentication Failures**        E --> L[VLAN 20 - Students]
+
+- Confirm user exists in Google Directory
+
+- Verify domain configuration matches your Google Workspace domains### 4. Deploy
+
+- Check FreeRADIUS logs: `docker logs freeradius-google-ldap`
+
+```bash        E --> M[VLAN 30 - Guests]<table>
+
+**3. Database Connection Error**
+
+- Ensure MySQL container is running: `docker-compose ps`# Start all services
+
+- Verify database credentials in `.env`
+
+- Check Docker network connectivitydocker-compose up -d    end<tr>
+
+
+
+**4. Dashboard Access Issues**
+
+- Check if dashboard container is running: `docker-compose ps`
+
+- Verify port 8080 is not blocked by firewall# Check status```<td width="50%">
+
+- Check dashboard logs: `docker logs radius-dashboard`
+
+docker-compose ps
+
+### Debug Mode
+
+```bash
+
+# Enable debug logging by editing docker-compose.yml
+
+# Uncomment this line in the freeradius service:# View logs (optional)
+
+# command: freeradius -X
+
+docker-compose logs -f**Authentication Flow:**### 🔐 **Enterprise Authentication**
+
+# Then restart with debug
+
+docker-compose restart freeradius```
+
+
+
+# View detailed logsUser Login → Access Point → FreeRADIUS → Google LDAP → VLAN Assignment → Network Access- ✅ Google Workspace LDAP integration
+
+docker logs -f freeradius-google-ldap
+
+```### 5. Access Dashboard
+
+
+
+### Log Locations- **Admin Dashboard**: http://localhost:8080- ✅ Multi-domain support (unlimited)
+
+- **FreeRADIUS**: `docker logs freeradius-google-ldap`
+
+- **MySQL**: `docker logs radius-mysql`- **Default Login**: admin / admin123 (change immediately)
+
+- **Dashboard**: `docker logs radius-dashboard`
 
 ---- ✅ Role-based access control
 
 ---
 
+---
+
+## 🤝 Contributing
+
 - ✅ Automatic VLAN assignment
+
+We welcome contributions! Please follow these steps:
 
 ## 🔧 Configuration
 
-## ⚡ Quick Start- ✅ Session management & timeouts
+1. Fork the repository
 
-### Supported Domains & VLANs
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)## ⚡ Quick Start- ✅ Session management & timeouts
+
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+
+4. Push to the branch (`git push origin feature/amazing-feature`)### Supported Domains & VLANs
+
+5. Open a Pull Request
 
 
+
+---
 
 | Domain Type | VLAN | Session Timeout | Idle Timeout | Access Level |
 
+## 📄 License
+
 |-------------|------|-----------------|--------------|--------------|### Prerequisites### 📊 **Smart Management Dashboard**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 | Staff Domain | 10 | 12 hours | 1 hour | Full Access |
 
+---
+
 | Student Domain | 20 | 8 hours | 30 minutes | Limited Access |- Docker and Docker Compose installed- ✅ Real-time user monitoring
+
+## 🆘 Support
 
 | Guest Domain | 30 | 4 hours | 15 minutes | Internet Only |
 
-- Google Workspace with Secure LDAP enabled- ✅ Authentication analytics
+- **Issues**: [GitHub Issues](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/issues)
+
+- **Discussions**: [GitHub Discussions](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/discussions)- Google Workspace with Secure LDAP enabled- ✅ Authentication analytics
+
+- **Email**: support@senthilnasa.ac.in
 
 ### Environment Variables
 
+---
+
 - Google LDAP certificates downloaded- ✅ Active session control
+
+## 🔗 References
 
 | Variable | Description | Default | Required |
 
-|----------|-------------|---------|----------|- ✅ Domain-based statistics
+- [FreeRADIUS Documentation](https://freeradius.org/documentation/)
+
+- [Google Secure LDAP Setup Guide](https://support.google.com/a/answer/9048434)|----------|-------------|---------|----------|- ✅ Domain-based statistics
+
+- [Docker Compose Reference](https://docs.docker.com/compose/)
 
 | `ACCESS_ALLOWED_CIDR` | Network range allowed to access RADIUS | `10.10.0.0/16` | Yes |
 
+---
+
 | `SHARED_SECRET` | RADIUS shared secret | `testing123` | Yes |### 1. Clone Repository- ✅ One-click user disconnect
+
+<div align="center">
 
 | `BASE_DOMAIN` | Your primary domain name | - | Yes |
 
+**⭐ If this project helps you, please give it a star on GitHub! ⭐**
+
 | `DOMAIN_EXTENSION` | Domain extension (com, edu, etc) | - | Yes |```bash
+
+[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=social)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers)
 
 | `GOOGLE_LDAPTLS_CERT` | Path to LDAP client certificate | `/etc/freeradius/certs/ldap-client.crt` | Yes |
 
+</div>
 | `GOOGLE_LDAPTLS_KEY` | Path to LDAP client key | `/etc/freeradius/certs/ldap-client.key` | Yes |git clone https://github.com/senthilnasa/freeradius-google-ldap-dashboard.git</td>
 
 | `DB_PASSWORD` | Database password | `radiuspass` | Yes |
@@ -413,16 +1154,6 @@ User Login → Access Point → FreeRADIUS → Google LDAP → VLAN Assignment �
 | `DB_ROOT_PASSWORD` | MySQL root password | `rootpass` | Yes |cd freeradius-google-ldap-dashboard<td width="50%">
 
 | `ADMIN_PASSWORD` | Dashboard admin password | `admin123` | Yes |
-
-| `DOMAIN_1` | Primary domain | - | Yes |```
-
-| `DOMAIN_2` | Secondary domain | - | No |
-
-| `DOMAIN_3` | Guest domain | - | No |### 🏗️ **Production Infrastructure**
-
-| `STAFF_DOMAINS` | Staff domain list | - | Yes |
-
-| `STUDENT_DOMAINS` | Student domain list | - | No |### 2. Setup Google LDAP Certificates- ✅ Docker containerization
 
 
 
