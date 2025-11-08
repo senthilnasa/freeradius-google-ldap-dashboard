@@ -49,13 +49,15 @@ services:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
+      - TZ=${MYSQL_TIMEZONE}
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d:ro
       - ./mysql-conf:/etc/mysql/conf.d:ro
-    command: --default-authentication-plugin=mysql_native_password
+    # MySQL server configuration with timezone offset from environment variable
+    command: --default-authentication-plugin=mysql_native_password --default-time-zone='${MYSQL_TIMEZONE_OFFSET}'
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
