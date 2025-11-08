@@ -1,0 +1,45 @@
+sql {
+	driver = "rlm_sql_mysql"
+	
+	# Database connection - using environment variables
+	server = "${ENV_DB_HOST}"
+	port = ${ENV_DB_PORT}
+	login = "${ENV_DB_USER}"
+	password = "${ENV_DB_PASSWORD}"
+	radius_db = "${ENV_DB_NAME}"
+	
+	# Core tables
+	acct_table1 = "radacct"
+	acct_table2 = "radacct"
+	postauth_table = "radpostauth"
+	authcheck_table = "radcheck"
+	groupcheck_table = "radgroupcheck"
+	authreply_table = "radreply"
+	groupreply_table = "radgroupreply"
+	usergroup_table = "radusergroup"
+	
+	# Connection management - configurable via environment variables
+	delete_stale_sessions = yes
+	num_sql_socks = ENV_DB_MAX_CONNECTIONS
+	connect_failure_retry_delay = 60
+	lifetime = 0
+	max_queries = 0
+	idle_timeout = 60
+	
+	# Enable SQL tracing for debugging (controlled by environment variable)
+	sqltrace = ENV_ENABLE_SQL_TRACE
+	sqltracefile = ${logdir}/sqltrace.sql
+	
+	# Username handling
+	sql_user_name = "%{User-Name}"
+	
+	# Read clients from database
+	read_clients = no
+	client_table = "nas"
+	
+	# Group attribute
+	group_attribute = "SQL-Group"
+	
+	# Use standard FreeRADIUS MySQL queries
+	$INCLUDE ${modconfdir}/${.:name}/main/mysql/queries.conf
+}

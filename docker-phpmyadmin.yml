@@ -1,0 +1,35 @@
+# phpMyAdmin for Development - DEVELOPMENT ONLY
+# ⚠️  WARNING: This is for development use only - NOT production safe
+# 
+# Usage:
+#   docker-compose -f docker-phpmyadmin.yml up -d
+#   Access: http://localhost:8081
+#   Login: Use DB_USER and DB_PASSWORD from .env file
+#
+# To stop:
+#   docker-compose -f docker-phpmyadmin.yml down
+
+services:
+  phpmyadmin-dev:
+    image: phpmyadmin/phpmyadmin:5.2.1
+    container_name: radius-phpmyadmin-dev
+    env_file: .env
+    environment:
+      - PMA_HOST=${DB_HOST:-mysql}
+      - PMA_PORT=${DB_PORT:-3306}
+      - PMA_USER=${DB_USER:-radius}
+      - PMA_PASSWORD=${DB_PASSWORD}
+      - PMA_ARBITRARY=0  # Only connect to configured host
+      - UPLOAD_LIMIT=32M
+      - MEMORY_LIMIT=256M
+      - MAX_EXECUTION_TIME=300
+    ports:
+      - "8081:80"  # Development port
+    restart: unless-stopped
+    networks:
+      - freeradius-ldap_radius-net  # Connect to existing network
+
+# Use external network from main docker-compose
+networks:
+  freeradius-ldap_radius-net:
+    external: true
