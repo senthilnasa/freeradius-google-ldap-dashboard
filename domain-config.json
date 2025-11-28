@@ -1,0 +1,38 @@
+[
+  {
+    "domain": "krea.ac.in",
+    "key": ".mba",
+    "Type": "Student-MBA",
+    "VLAN": "216"
+  },
+  {
+    "domain": "krea.ac.in",
+    "key": ".sias",
+    "Type": "Student-SIAS",
+    "VLAN": "224"
+  },
+  {
+    "domain": "krea.ac.in",
+    "key": ".phd",
+    "Type": "Student-Ph D",
+    "VLAN": "232"
+  },
+  {
+    "domain": "krea.ac.in",
+    "key": ".bba",
+    "Type": "Student-BBA",
+    "VLAN": "240"
+  },
+  {
+    "domain": "krea.ac.in",
+    "key": "",
+    "Type": "Student-Others",
+    "VLAN": "144"
+  },
+  {
+    "domain": "krea.edu.in",
+    "key": "",
+    "Type": "Staff",
+    "VLAN": "248"
+  }
+]

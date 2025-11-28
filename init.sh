@@ -94,13 +94,26 @@ if [ ! -z "$DOMAIN_CONFIG" ]; then
 EOFCONFIG
 
     # Parse JSON and generate unlang configuration using grep/sed
+    # Support both key-based matching and domain-only matching
     # Extract domains and create domain_config.conf
-    echo "# Domain to VLAN and Type mappings" > /tmp/domain_config.conf
-    echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*","Type":"[^"]*","VLAN":"[^"]*"' | while read entry; do
+    echo "# Domain to VLAN and Type mappings (with optional key matching)" > /tmp/domain_config.conf
+
+    # Try to parse with key field first (new format)
+    echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*","key":"[^"]*","Type":"[^"]*","VLAN":"[^"]*"' | while read entry; do
+        domain=$(echo "$entry" | sed 's/.*"domain":"\([^"]*\)".*/\1/')
+        key=$(echo "$entry" | sed 's/.*"key":"\([^"]*\)".*/\1/')
+        user_type=$(echo "$entry" | sed 's/.*"Type":"\([^"]*\)".*/\1/')
+        vlan=$(echo "$entry" | sed 's/.*"VLAN":"\([^"]*\)".*/\1/')
+        echo "$domain|$key|$vlan|$user_type" >> /tmp/domain_config.conf
+    done
+
+    # Also support legacy format without key field for backward compatibility
+    echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*","Type":"[^"]*","VLAN":"[^"]*"' | grep -v '"key":' | while read entry; do
         domain=$(echo "$entry" | sed 's/.*"domain":"\([^"]*\)".*/\1/')
         user_type=$(echo "$entry" | sed 's/.*"Type":"\([^"]*\)".*/\1/')
         vlan=$(echo "$entry" | sed 's/.*"VLAN":"\([^"]*\)".*/\1/')
-        echo "$domain|$vlan|$user_type" >> /tmp/domain_config.conf
+        # No key for legacy format, use empty string
+        echo "$domain||$vlan|$user_type" >> /tmp/domain_config.conf
     done
     
     # Extract and display supported domains
@@ -115,23 +128,72 @@ EOFCONFIG
         mv /tmp/domain_config.conf /etc/freeradius/mods-config/files/domain_mappings.conf
         
         # Generate dynamic unlang configuration for VLAN assignment using bash
+        # Support both key-based matching (user.mba@domain) and domain-only matching
         > /tmp/dynamic_vlan.conf  # Clear file
         first_entry=true
-        
-        echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*","Type":"[^"]*","VLAN":"[^"]*"' | while read entry; do
+
+        # Process entries with key field (new format)
+        echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*","key":"[^"]*","Type":"[^"]*","VLAN":"[^"]*"' | while read entry; do
             domain=$(echo "$entry" | sed 's/.*"domain":"\([^"]*\)".*/\1/')
+            key=$(echo "$entry" | sed 's/.*"key":"\([^"]*\)".*/\1/')
             user_type=$(echo "$entry" | sed 's/.*"Type":"\([^"]*\)".*/\1/')
             vlan=$(echo "$entry" | sed 's/.*"VLAN":"\([^"]*\)".*/\1/')
-            
+
             if [ "$first_entry" = true ]; then
                 keyword="if"
                 first_entry=false
             else
                 keyword="elsif"
             fi
-            
+
+            # If key is empty, it's a fallback/default for that domain
+            if [ -z "$key" ]; then
+                cat >> /tmp/dynamic_vlan.conf << UNLANG
+		# $domain (default/others) = $user_type, VLAN $vlan
+		$keyword (&request:Tmp-String-0 == "$domain") {
+			update control {
+				Tmp-String-1 := "$user_type"
+			}
+			update reply {
+				Tunnel-Type := VLAN
+				Tunnel-Medium-Type := IEEE-802
+				Tunnel-Private-Group-Id := "$vlan"
+			}
+		}
+UNLANG
+            else
+                # Key-based matching: check if User-Name contains the key AND domain matches
+                cat >> /tmp/dynamic_vlan.conf << UNLANG
+		# $domain with key "$key" = $user_type, VLAN $vlan
+		$keyword ((&request:Tmp-String-0 == "$domain") && (&User-Name =~ /$key@/)) {
+			update control {
+				Tmp-String-1 := "$user_type"
+			}
+			update reply {
+				Tunnel-Type := VLAN
+				Tunnel-Medium-Type := IEEE-802
+				Tunnel-Private-Group-Id := "$vlan"
+			}
+		}
+UNLANG
+            fi
+        done
+
+        # Process legacy format (domain-only, no key field) for backward compatibility
+        echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*","Type":"[^"]*","VLAN":"[^"]*"' | grep -v '"key":' | while read entry; do
+            domain=$(echo "$entry" | sed 's/.*"domain":"\([^"]*\)".*/\1/')
+            user_type=$(echo "$entry" | sed 's/.*"Type":"\([^"]*\)".*/\1/')
+            vlan=$(echo "$entry" | sed 's/.*"VLAN":"\([^"]*\)".*/\1/')
+
+            if [ "$first_entry" = true ]; then
+                keyword="if"
+                first_entry=false
+            else
+                keyword="elsif"
+            fi
+
             cat >> /tmp/dynamic_vlan.conf << UNLANG
-		# $domain = $user_type, VLAN $vlan
+		# $domain = $user_type, VLAN $vlan (legacy format)
 		$keyword (&request:Tmp-String-0 == "$domain") {
 			update control {
 				Tmp-String-1 := "$user_type"
