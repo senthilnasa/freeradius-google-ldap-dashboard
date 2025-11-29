@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS billing_plans (
     planRecurring varchar(32) default NULL,
     planRecurringPeriod varchar(32) default NULL,
     planActive varchar(32) default NULL,
-    creationdate datetime NOT NULL default '0000-00-00 00:00:00',
+    creationdate datetime NOT NULL default CURRENT_TIMESTAMP,
     creationby varchar(128) NOT NULL default '',
-    updatedate datetime NOT NULL default '0000-00-00 00:00:00',
+    updatedate datetime NOT NULL default CURRENT_TIMESTAMP,
     updateby varchar(128) NOT NULL default '',
     PRIMARY KEY (id),
     KEY planname (planname)
@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS userinfo (
     changeuserinfo varchar(128) NOT NULL default '',
     portalloginpassword varchar(128) NOT NULL default '',
     enableportallogin int(32) default 0,
-    creationdate datetime NOT NULL default '0000-00-00 00:00:00',
+    creationdate datetime NOT NULL default CURRENT_TIMESTAMP,
     creationby varchar(128) NOT NULL default '',
-    updatedate datetime NOT NULL default '0000-00-00 00:00:00',
+    updatedate datetime NOT NULL default CURRENT_TIMESTAMP,
     updateby varchar(128) NOT NULL default '',
     PRIMARY KEY (id),
     KEY username (username)
