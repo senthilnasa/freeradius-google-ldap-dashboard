@@ -19,9 +19,8 @@ innodb_lock_wait_timeout = 50
 character-set-server = utf8mb4
 collation-server = utf8mb4_unicode_ci
 
-# Query cache (deprecated in MySQL 8.0 but keeping for compatibility)
-query_cache_size = 0
-query_cache_type = 0
+# Query cache removed in MySQL 8.0 (no longer supported)
+# query_cache_size and query_cache_type removed - not needed
 
 # Logging
 slow_query_log = 1
