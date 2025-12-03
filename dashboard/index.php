@@ -416,17 +416,26 @@ $roleCaseStatement = generateRoleCaseStatement();
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Time</th>
+                                        <th>Time (IST)</th>
                                         <th>Username</th>
                                         <th>Domain</th>
                                         <th>Status</th>
                                         <th>Reply</th>
+                                        <th>Error Type</th>
+                                        <th>Message</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $stmt = $pdo->query("
-                                        SELECT authdate, username, reply
+                                        SELECT
+                                            authdate,
+                                            authdate_utc,
+                                            username,
+                                            reply,
+                                            reply_message,
+                                            error_type,
+                                            CONVERT_TZ(authdate_utc, '+00:00', '+05:30') as authdate_ist
                                         FROM radpostauth
                                         ORDER BY authdate DESC
                                         LIMIT 100
@@ -437,13 +446,27 @@ $roleCaseStatement = generateRoleCaseStatement();
                                         $status_icon = $row['reply'] == 'Access-Accept' ? 'check-circle' : 'times-circle';
                                         $domain = strpos($row['username'], '@') !== false ? substr($row['username'], strpos($row['username'], '@') + 1) : 'N/A';
 
+                                        // Use IST time if available, otherwise fall back to authdate
+                                        $display_time = $row['authdate_ist'] ?? $row['authdate'];
+
+                                        // Format error type for display
+                                        $error_type_display = $row['error_type'] ? str_replace('_', ' ', ucwords($row['error_type'], '_')) : '-';
+
+                                        // Clean up reply message
+                                        $reply_msg = $row['reply_message'] ?? '-';
+                                        if ($row['reply'] == 'Access-Accept' && strpos($reply_msg, 'Authenticated as') !== false) {
+                                            $reply_msg = 'Authentication successful';
+                                        }
+
                                         echo "<tr>";
-                                        echo "<td>" . date('Y-m-d', strtotime($row['authdate'])) . "</td>";
-                                        echo "<td>" . date('H:i:s', strtotime($row['authdate'])) . "</td>";
+                                        echo "<td>" . date('Y-m-d', strtotime($display_time)) . "</td>";
+                                        echo "<td>" . date('H:i:s', strtotime($display_time)) . "</td>";
                                         echo "<td>{$row['username']}</td>";
                                         echo "<td>{$domain}</td>";
                                         echo "<td><i class='fas fa-{$status_icon} text-{$status_class}'></i> " . ($row['reply'] == 'Access-Accept' ? 'Success' : 'Failed') . "</td>";
                                         echo "<td>{$row['reply']}</td>";
+                                        echo "<td><span class='badge badge-" . ($row['error_type'] ? 'warning' : 'success') . "'>{$error_type_display}</span></td>";
+                                        echo "<td class='text-truncate' style='max-width: 300px;' title='{$reply_msg}'>{$reply_msg}</td>";
                                         echo "</tr>";
                                     }
                                     ?>

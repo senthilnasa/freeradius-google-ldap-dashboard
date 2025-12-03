@@ -125,11 +125,16 @@ CREATE TABLE IF NOT EXISTS radpostauth (
     username VARCHAR(64) NOT NULL DEFAULT '',
     pass VARCHAR(64) NOT NULL DEFAULT '',
     reply VARCHAR(32) NOT NULL DEFAULT '',
+    reply_message TEXT DEFAULT NULL,
+    error_type VARCHAR(64) DEFAULT NULL,
     authdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    authdate_utc TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (id),
     KEY idx_username (username),
     KEY idx_authdate (authdate),
-    KEY idx_username_date (username, authdate)
+    KEY idx_username_date (username, authdate),
+    KEY idx_error_type (error_type),
+    KEY idx_reply (reply)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- Network Access Servers (Access Points)

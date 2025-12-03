@@ -816,6 +816,12 @@ post-auth {
 	#  Get an address from the IP Pool.
 #	main_pool
 
+	#  Set error type to NULL for successful authentications
+	#  This helps differentiate between successful logins and failures in reports
+	update control {
+		Error-Type := ""
+	}
+
 	#  Log successful authentications to SQL
 	#  Skip logging for tunneled EAP (TTLS/PEAP) as inner-tunnel already logged it
 	#  This prevents duplicate entries in radpostauth table
@@ -953,11 +959,17 @@ post-auth {
 			update reply {
 				Reply-Message := "Authentication failed: Invalid username or password. Please check your credentials and try again."
 			}
+			update control {
+				Error-Type := "password_wrong"
+			}
 		}
 		# Check if user account doesn't exist
 		elsif (&Module-Failure-Message =~ /User not found/) {
 			update reply {
 				Reply-Message := "Authentication failed: User account not found. Please contact IT support."
+			}
+			update control {
+				Error-Type := "user_not_found"
 			}
 		}
 		# Check if LDAP server is unreachable
@@ -965,11 +977,17 @@ post-auth {
 			update reply {
 				Reply-Message := "Authentication failed: Unable to reach authentication server. Please try again later."
 			}
+			update control {
+				Error-Type := "ldap_connection_failed"
+			}
 		}
 		# Check for certificate issues (EAP-TLS/PEAP)
 		elsif (&Module-Failure-Message =~ /certificate|TLS/) {
 			update reply {
 				Reply-Message := "Authentication failed: Certificate error. Please check your device security settings."
+			}
+			update control {
+				Error-Type := "ssl_certificate_error"
 			}
 		}
 		# Check if domain/realm is not supported
@@ -977,11 +995,17 @@ post-auth {
 			update reply {
 				Reply-Message := "Authentication failed: Email domain not supported. Use your institutional email address."
 			}
+			update control {
+				Error-Type := "invalid_domain"
+			}
 		}
 		# Generic failure message
 		else {
 			update reply {
 				Reply-Message := "Authentication failed: Invalid credentials. Please verify your username and password."
+			}
+			update control {
+				Error-Type := "authentication_failed"
 			}
 		}
 		
