@@ -604,33 +604,26 @@ ldap {
 		#  connections during instantiation it will exit.
 		#  Set to 0 to allow the server to start without the
 		#  directory being available.
-		start = ${thread[pool].start_servers}
+		#  Increased from default for faster startup
+		start = 5
 
 		#  Minimum number of connections to keep open
-		min = ${thread[pool].min_spare_servers}
+		#  Increased for faster response times - avoids connection creation delay
+		min = 5
 
 		#  Maximum number of connections
-		#
-		#  If these connections are all in use and a new one
-		#  is requested, the request will NOT get a connection.
-		#
-		#  Setting 'max' to LESS than the number of threads means
-		#  that some threads may starve, and you will see errors
-		#  like 'No connections available and at max connection limit'
-		#
-		#  Setting 'max' to MORE than the number of threads means
-		#  that there are more connections than necessary.
-		max = ${thread[pool].max_servers}
+		#  Increased for handling concurrent authentication requests
+		#  Set higher for deployments with many simultaneous WiFi users
+		max = 20
 
 		#  Spare connections to be left idle
-		#
-		#  NOTE: Idle connections WILL be closed if "idle_timeout"
-		#  is set.  This should be less than or equal to "max" above.
-		spare = ${thread[pool].max_spare_servers}
+		#  Keep more idle connections ready to reduce bind latency
+		spare = 10
 
 		#  Number of uses before the connection is closed
 		#
-		#  0 means "infinite"
+		#  0 means "infinite" - connections are reused indefinitely
+		#  This reduces connection overhead for repeated authentications
 		uses = 0
 
 		#  The number of seconds to wait after the server tries
@@ -639,11 +632,13 @@ ldap {
 		retry_delay = 30
 
 		#  The lifetime (in seconds) of the connection
+		#  0 = infinite lifetime, connections stay open until idle_timeout
 		lifetime = 0
 
 		#  Idle timeout (in seconds).  A connection which is
 		#  unused for this length of time will be closed.
-		idle_timeout = 60
+		#  Increased from 60 to 600 (10 minutes) to keep connections alive longer
+		idle_timeout = 600
 
 		#  NOTE: All configuration settings are enforced.  If a
 		#  connection is closed because of 'idle_timeout',

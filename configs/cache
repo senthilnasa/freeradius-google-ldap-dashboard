@@ -20,8 +20,9 @@ cache ldap_cache {
 	ttl = ENV_CACHE_TTL
 
 	#  Maximum number of entries in the cache
-	#  0 = unlimited (memory-based caching)
-	max_entries = 10000
+	#  Set higher for larger deployments (0 = unlimited)
+	#  Increased from 10000 to 50000 for better caching
+	max_entries = 50000
 
 	#  Number of entries to pre-allocate
 	#  This improves performance by reducing memory allocation overhead
