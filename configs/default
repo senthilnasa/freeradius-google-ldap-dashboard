@@ -953,6 +953,14 @@ post-auth {
 	#  The "session-state" attributes are not available here.
 	#
 	Post-Auth-Type REJECT {
+		# Clear VLAN attributes from reply for failed authentications
+		# VLAN should only be assigned for successful authentications
+		update reply {
+			Tunnel-Type !* ANY
+			Tunnel-Medium-Type !* ANY
+			Tunnel-Private-Group-Id !* ANY
+		}
+
 		#
 		# Send helpful error messages to WiFi clients
 		# This helps users understand WHY authentication failed

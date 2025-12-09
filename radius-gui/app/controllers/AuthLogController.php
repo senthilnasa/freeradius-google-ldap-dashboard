@@ -37,6 +37,7 @@ class AuthLogController
                     reply_message,
                     error_type,
                     vlan,
+                    user_type,
                     authdate,
                     authdate_utc,
                     CONVERT_TZ(authdate_utc, '+00:00', '+05:30') as authdate_ist
@@ -123,6 +124,7 @@ class AuthLogController
                     reply_message,
                     error_type,
                     vlan,
+                    user_type,
                     authdate,
                     authdate_utc
                 FROM radpostauth
@@ -158,21 +160,24 @@ class AuthLogController
             'Username',
             'Result',
             'VLAN',
+            'User Type',
             'Error Type',
             'Message'
         ];
 
         $data = [];
         foreach ($logs as $log) {
-            // Only show VLAN for successful authentications
+            // Only show VLAN and User Type for successful authentications
             $vlan = ($log['reply'] === 'Access-Accept') ? ($log['vlan'] ?? '-') : '';
-            
+            $userType = ($log['reply'] === 'Access-Accept') ? ($log['user_type'] ?? '-') : '';
+
             $data[] = [
                 $log['authdate'],
                 $log['authdate_utc'] ?? '-',
                 $log['username'],
                 $log['reply'],
                 $vlan,
+                $userType,
                 $log['error_type'] ?? '-',
                 $log['reply_message'] ?? '-'
             ];

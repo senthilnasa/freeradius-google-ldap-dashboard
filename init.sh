@@ -202,9 +202,10 @@ EOFCONFIG
 			update reply {
 $vlan_attrs
 			}
-			# Copy VLAN to session-state for EAP-TTLS/PEAP inner tunnel logging
+			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
 			update session-state {
 $vlan_attrs
+				Tmp-String-1 := "$user_type"
 			}
 		}
 UNLANG
@@ -222,9 +223,10 @@ UNLANG
 			update reply {
 $vlan_attrs
 			}
-			# Copy VLAN to session-state for EAP-TTLS/PEAP inner tunnel logging
+			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
 			update session-state {
 $vlan_attrs
+				Tmp-String-1 := "$user_type"
 			}
 		}
 UNLANG

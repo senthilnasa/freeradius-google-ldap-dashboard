@@ -1,506 +1,448 @@
-# FreeRADIUS Google LDAP Enterprise Dashboard
+# FreeRADIUS Google LDAP Dashboard
 
-🚀 **High-Performance Enterprise RADIUS Authentication** with Google Workspace Integration + Modern Monitoring Dashboard
+A comprehensive FreeRADIUS authentication system with Google LDAP integration and a modern web-based management dashboard.
 
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=flat-square&logo=docker)](https://www.docker.com/) [![License](https://img.shields.io/github/license/senthilnasa/freeradius-google-ldap-dashboard?style=flat-square)](LICENSE) ![Performance](https://img.shields.io/badge/Auth%20Speed-0.08s%20cached-brightgreen?style=flat-square) [![Tests](https://img.shields.io/badge/Tests-Automated-success?style=flat-square)](TESTING.md)
+## Features
 
----
+### FreeRADIUS Server
+- **Google LDAP Integration**: Seamless authentication against Google Workspace Directory
+- **EAP-TTLS/PEAP Support**: Industry-standard wireless authentication protocols
+- **Dynamic VLAN Assignment**: Automatic VLAN assignment based on user groups/departments
+- **User Type Classification**: Categorize users by type (Student-MBA, Student-SIAS, Staff, etc.)
+- **Comprehensive Logging**: Detailed authentication and accounting logs with error categorization
 
-## 🆕 What's New
+### Web Dashboard
+- **Real-time Monitoring**: Live authentication logs with VLAN and user type information
+- **Advanced Reporting**:
+  - Daily Authentication Summary
+  - Monthly Usage Reports
+  - Failed Login Analysis
+  - User Type Distribution
+  - System Health Metrics
+- **User Management**: Full operator/admin management with role-based access control
+- **CSV Export**: Export authentication logs and reports
+- **Responsive UI**: Modern Bootstrap 5 interface
 
-**✨ Modern Dashboard (December 2024):**
-- 🎨 **New MVC Dashboard** - Professional monitoring UI with 14 comprehensive pages
-- 📊 **PDF Reports** - Generate professional PDF reports with TCPDF
-- 🔐 **Role-Based Access** - 3-tier permission system (Superadmin/Network Admin/Helpdesk)
-- 📈 **Enhanced Error Tracking** - Detailed error categorization and reporting
-- 🧪 **Automated Testing** - Complete test suite with Docker integration
-- 📝 **Migration Guide** - Easy upgrade from legacy dashboard
+## Quick Start
 
-**[➡️ See Modern Dashboard Documentation](radius-gui/README.md)** | **[➡️ Migration Guide](radius-gui/MIGRATION.md)**
+### Prerequisites
+- Docker and Docker Compose
+- Google Workspace account with LDAP enabled
+- Network access to Google LDAP servers
 
----
+### Installation
 
-## 🎯 What You Get
-
-### Core Features
-- ✅ **Blazing Fast** - 50x faster with LDAP caching (0.08s cached auth)
-- ✅ **High Performance** - Optimized connection pool (10-50 concurrent connections)
-- ✅ **Production Ready** - Supports 100+ concurrent users, 200+ auth/sec
-- ✅ **Google Integration** - Seamless Google Workspace LDAP authentication
-- ✅ **Multi-Domain** - Unlimited domains with automatic VLAN assignment
-- ✅ **Firewall Sync** - Real-time session replication to firewall (User-ID)
-- ✅ **Helpful Errors** - Users see specific error messages with detailed tracking
-- ✅ **Easy Setup** - One-command Docker deployment
-- ✅ **Comprehensive Docs** - Everything you need in this README
-
-### Modern Dashboard Features
-- ✅ **14 Monitoring Pages** - Dashboard, Online Users, Auth Log, Reports, User Management, Settings
-- ✅ **PDF & CSV Exports** - Professional reports with TCPDF library
-- ✅ **Enhanced Error Tracking** - 6 error types (password_wrong, user_not_found, ldap_connection_failed, ssl_certificate_error, invalid_domain, authentication_failed)
-- ✅ **Timezone Support** - Store GMT/UTC, display IST (configurable)
-- ✅ **Role-Based Access Control** - Fine-grained permissions system
-- ✅ **Modern UI** - Bootstrap 5, DataTables, Chart.js integration
-- ✅ **Automated Testing** - RADIUS + Web application test suite
-
----
-
-## 🚀 Quick Start (5 Minutes)
-
+1. **Clone the repository**
 ```bash
-# 1. Clone repository
-git clone https://github.com/senthilnasa/freeradius-google-ldap-dashboard.git
+git clone <repository-url>
 cd freeradius-google-ldap-dashboard
+```
 
-# 2. Add Google LDAP certificates
-mkdir -p certs
-cp /path/to/google-ldap.crt certs/ldap-client.crt
-cp /path/to/google-ldap.key certs/ldap-client.key
-
-# 3. Configure environment
+2. **Configure Environment**
+```bash
 cp .env.example .env
-nano .env  # Update: LDAP_BASE_DN, DOMAIN_CONFIG, passwords
-
-# 4. Deploy!
-docker-compose up -d
-
-# 5. Access modern dashboard
-# http://localhost:8080/radius-gui/public/ (admin/password)
-
-# 6. Test authentication
-docker exec freeradius-google-ldap radtest user@yourdomain.com password localhost 0 testing123
-
-# 7. Run automated tests (optional)
-./test.sh
 ```
 
-**First auth**: ~2-3 seconds | **Cached auth**: ~0.08 seconds (50x faster!)
-**Dashboard**: Modern MVC architecture with PDF reports and role-based access
-
----
-
-## 📊 Performance (Optimized!)
-
-| Metric | Value | Notes |
-|--------|-------|-------|
-| **First Authentication** | ~2-3s | LDAP query + bind + cache |
-| **Cached Authentication** | ~0.1s | **10-50x faster!** |
-| **Concurrent Users** | 100+ | Thread-pool managed |
-| **Cache Hit Rate** | 96.5% | After 1 hour |
-| **LDAP Connections** | Thread-based | Safe auto-scaling |
-
----
-
-## 🛠️ Helper Scripts (in `helper-scripts/` folder)
-
-| Script | Purpose | Platform |
-|--------|---------|----------|
-| **monitor-radius.ps1** | Real-time packet monitoring | PowerShell |
-| **test-accounting-replication.ps1** | Test accounting + firewall sync | PowerShell |
-| **sync-active-sessions-to-firewall.ps1** | Bulk sync sessions to firewall | PowerShell |
-| **generate-certs.sh/.bat** | Generate SSL certificates | Bash/Batch |
-| **reset-password.sh/.bat** | Reset dashboard password | Bash/Batch |
-
-**Usage:**
-```powershell
-cd helper-scripts
-.\monitor-radius.ps1  # Live packet monitoring
-```
-
----
-
-## 📖 Documentation
-
-### 🎨 **Modern Dashboard** (NEW!)
-- **[radius-gui/README.md](radius-gui/README.md)** - Complete dashboard documentation
-- **[radius-gui/DEPLOYMENT.md](radius-gui/DEPLOYMENT.md)** - Dashboard deployment guide
-- **[radius-gui/MIGRATION.md](radius-gui/MIGRATION.md)** - Migrate from legacy dashboard
-- **[radius-gui/APPLICATION_SUMMARY.md](radius-gui/APPLICATION_SUMMARY.md)** - Feature summary
-
-### 🧪 **Testing** (NEW!)
-- **[TESTING.md](TESTING.md)** - Complete testing guide with automated tests
-- **[test.sh](test.sh)** - One-command test runner
-- Test coverage: RADIUS authentication, accounting, web application
-
-### 📚 **Performance & Optimization**
-- **[OPTIMIZATION_SUMMARY.md](OPTIMIZATION_SUMMARY.md)** - Complete performance guide
-  - LDAP connection pool tuning
-  - Cache configuration
-  - Performance benchmarks
-  - Tuning for different environments
-- **[ENHANCED_LOGGING_README.md](ENHANCED_LOGGING_README.md)** - Error tracking & logging
-
-### 📁 **Archived Documentation**
-- **[docs-archive/](docs-archive/)** - Archived detailed guides
-  - Original README
-  - Feature-specific guides (caching, firewall, errors, etc.)
-  - Setup checklists
-  - Troubleshooting guides
-- **[archive/dashboard-legacy/](archive/dashboard-legacy/)** - Old dashboard (deprecated)
-
----
-
-## ⚙️ Configuration
-
-### Environment Variables (`.env` file)
-
+Edit `.env` with your configuration:
 ```env
-# Network
-ACCESS_ALLOWED_CIDR=10.10.0.0/16
-SHARED_SECRET=YourStrongSecret123!
+# Google LDAP Configuration
+LDAP_HOST=ldap.google.com
+LDAP_PORT=636
+LDAP_BASE_DN=dc=example,dc=com
+LDAP_BIND_DN=uid=radius,ou=service-accounts,dc=example,dc=com
+LDAP_BIND_PASSWORD=your_ldap_password
 
-# Google LDAP
-LDAP_BASE_DN=dc=yourdomain,dc=com
-LDAP_USER=cn=radius,ou=users,dc=yourdomain,dc=com
-LDAP_PASSWORD=your_ldap_password
+# RADIUS Configuration
+RADIUS_SHARED_SECRET=your_radius_secret
 
-# Domain & VLAN Mapping
-DOMAIN_CONFIG=[{"domain":"yourdomain.com","Type":"Staff","VLAN":"10"}]
+# Database Configuration
+DB_ROOT_PASSWORD=rootpassword123
+DB_PASSWORD=radius123
 
-# Performance
-CACHE_TIMEOUT=3000  # 50 minutes (recommended)
-
-# Database
-DB_PASSWORD=YourSecureDBPassword123!
-DB_ROOT_PASSWORD=YourSecureRootPassword123!
-
-# Dashboard
-ADMIN_PASSWORD=YourSecureAdminPassword123!
-
-# Firewall Replication (Optional)
-ENABLE_FIREWALL_REPLICATION=true
-FIREWALL_IP=10.10.10.1
-FIREWALL_SECRET=YourFirewallSecret123!
+# Application Configuration
+APP_URL=http://localhost:8080
+APP_TIMEZONE=Asia/Kolkata
 ```
 
-### Domain & VLAN Mapping
+3. **Configure Domain Mapping**
 
-Map email domains to VLANs automatically:
-
+Edit `freeradius/config/domain-config.json`:
 ```json
-[
-  {"domain":"staff.company.com","Type":"Staff","VLAN":"10"},
-  {"domain":"students.university.edu","Type":"Student","VLAN":"20"},
-  {"domain":"guest.company.com","Type":"Guest","VLAN":"30"}
-]
-```
-
-Users authenticating with `john@staff.company.com` → Assigned to VLAN 10
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────┐
-│   WiFi Devices      │
-│ Laptops, Phones     │
-└──────────┬──────────┘
-           │ 802.1X EAP-TTLS/PAP
-           ▼
-┌─────────────────────────────────────────┐
-│       Access Points (NAS)               │
-│ UniFi / Cisco / Aruba / Fortinet        │
-└──────────┬──────────────────────────────┘
-           │ RADIUS (1812/1813)
-           ▼
-┌─────────────────────────────────────────────────┐
-│            FreeRADIUS Server                    │
-│  ┌───────────────────────────────────────────┐  │
-│  │ LDAP Module (Optimized!)                  │  │
-│  │ ├── Connection Pool: 10-50 connections    │  │
-│  │ ├── Cache: TTL 3000s, Max 10k users       │  │
-│  │ └── Google LDAP (ldaps://ldap.google.com) │  │
-│  │                                            │  │
-│  │ Authentication Flow:                       │  │
-│  │ 1. Cache Check (0.08s if hit)             │  │
-│  │ 2. LDAP Query (2.3s if miss)              │  │
-│  │ 3. VLAN Assignment                         │  │
-│  │ 4. Error Messages (helpful!)               │  │
-│  │                                            │  │
-│  │ Accounting:                                │  │
-│  │ ├── MySQL Logging                          │  │
-│  │ └── Firewall Replication (User-ID)        │  │
-│  └───────────────────────────────────────────┘  │
-└──────────┬──────────────────┬───────────────────┘
-           │                  │
-           ▼                  ▼
-┌──────────────────┐  ┌──────────────────┐
-│ Google Workspace │  │ Firewall (Opt)   │
-│   Secure LDAP    │  │  10.10.10.1:1813 │
-└──────────────────┘  └──────────────────┘
-           │
-           ▼
-┌──────────────────────────────┐
-│  MySQL Database + Dashboard  │
-│  http://localhost:8080       │
-└──────────────────────────────┘
-```
-
----
-
-## 🔥 Features
-
-### Core Authentication
-- 🔐 **Google Workspace LDAP** - Secure LDAP integration
-- ⚡ **High-Performance Cache** - 50x faster with 3000s TTL
-- 🔌 **Connection Pool** - 10-50 concurrent LDAP connections
-- 🏷️ **Multi-Domain Support** - Unlimited domains in one Workspace
-- 🌐 **Auto VLAN Assignment** - Based on email domain
-- 💬 **Helpful Error Messages** - Users see specific failure reasons
-
-### Enhanced Error Tracking (NEW!)
-- 📊 **6 Error Types** - Categorized error tracking:
-  - `password_wrong` - Invalid password attempts
-  - `user_not_found` - Non-existent user attempts
-  - `ldap_connection_failed` - LDAP connectivity issues
-  - `ssl_certificate_error` - SSL/TLS certificate problems
-  - `invalid_domain` - Domain not configured
-  - `authentication_failed` - Generic authentication failures
-- 💾 **Database Logging** - Store Access-Accept & Access-Reject with detailed messages
-- 🕐 **Timezone Support** - Store GMT/UTC timestamps, display IST (configurable)
-- 📈 **Error Analytics** - Dashboard with error breakdown and trends
-
-### Modern Dashboard (NEW!)
-- 🎨 **14 Comprehensive Pages** - Professional monitoring interface
-  - Dashboard with real-time KPIs
-  - Online Users tracking
-  - Authentication Log with error tracking
-  - User Session History
-  - Top Users by Bandwidth
-  - NAS/AP Usage Statistics
-  - Error Analytics
-  - 3 Advanced Reports (Daily Auth, Monthly Usage, Failed Logins)
-  - User Management (CRUD operations)
-  - Settings & Configuration
-- 📊 **PDF Reports** - Professional PDF generation with TCPDF
-- 💾 **CSV Exports** - Excel-compatible exports with UTF-8 BOM
-- 🔐 **Role-Based Access** - 3-tier RBAC (Superadmin, Network Admin, Helpdesk)
-- 🎨 **Modern UI** - Bootstrap 5, DataTables, Chart.js
-
-### Advanced Features
-- 🔥 **Firewall Replication** - Sync sessions to firewall (User-ID)
-- 🔒 **Password Security** - Bcrypt hashing with auto-upgrade from legacy (SHA-256/MD5)
-- 📈 **Session Management** - Track active connections in real-time
-- 🧪 **Automated Testing** - Complete RADIUS + Web application test suite
-- 🔐 **Security Hardening** - CSRF protection, XSS prevention, prepared statements
-
-### Enterprise Ready
-- 🐳 **Docker Containerized** - Single-command deployment
-- 💾 **MySQL 8.0 Backend** - High-performance database with optimized queries
-- 🔄 **Auto-Restart** - Health checks and recovery
-- 📝 **Comprehensive Logging** - Audit trails with enhanced error tracking
-- 🛡️ **Security Hardened** - Production-ready configuration
-- 🧪 **Test Suite** - Automated testing with Docker integration
-
----
-
-## 🔧 Performance Tuning
-
-### Connection Pool (Thread-Based - Safe Configuration)
-
-```coffeescript
-# configs/ldap
-pool {
-    start = ${thread[pool].start_servers}  # Uses thread pool config
-    min = ${thread[pool].min_spare_servers}  # Safe auto-scaling
-    max = ${thread[pool].max_servers}  # Prevents crashes
-    spare = ${thread[pool].max_spare_servers}  # Stable performance
+{
+  "domains": {
+    "example.com": {
+      "Name": "Example Organization",
+      "Base_DN": "dc=example,dc=com",
+      "Search_Filter": "(mail=%u)",
+      "Groups": {
+        "student.mba@example.com": {
+          "VLAN": "100",
+          "Type": "Student-MBA"
+        },
+        "staff@example.com": {
+          "VLAN": "10",
+          "Type": "Staff"
+        }
+      }
+    }
+  }
 }
 ```
 
-**Why Thread-Based?**
-- ✅ **Prevents crashes** - Dynamically sized based on FreeRADIUS thread pool
-- ✅ **Auto-scaling** - Adjusts to system resources automatically
-- ✅ **Safe default** - Won't overload your system
-- ⚠️ **Important:** Hardcoding pool values can cause app crashes if thread pool is too small!
+4. **Start the Services**
+```bash
+docker-compose up -d
+```
 
-### Cache Configuration
+5. **Access the Dashboard**
+- URL: http://localhost:8080
+- Username: `admin`
+- Password: `admin123`
+- **Note**: You will be forced to change the password on first login
 
+### Service Ports
+- **FreeRADIUS**: UDP 1812 (Authentication), 1813 (Accounting)
+- **Web Dashboard**: HTTP 8080
+- **MySQL**: TCP 3306
+
+## Configuration
+
+### VLAN and User Type Assignment
+
+VLAN and user type are assigned based on the user's email domain and group membership as defined in `domain-config.json`.
+
+**Example Configuration:**
+```json
+{
+  "domains": {
+    "krea.edu.in": {
+      "Name": "Krea University",
+      "Base_DN": "dc=krea,dc=edu,dc=in",
+      "Search_Filter": "(mail=%u)",
+      "Groups": {
+        "*.mba@krea.edu.in": {
+          "VLAN": "256",
+          "Type": "Student-MBA"
+        },
+        "*@krea.edu.in": {
+          "VLAN": "10",
+          "Type": "Staff"
+        }
+      }
+    }
+  }
+}
+```
+
+**Matching Rules:**
+- Exact match: `student@example.com`
+- Domain wildcard: `*@example.com`
+- Subdomain wildcard: `*.mba@example.com`
+- Priority: More specific patterns match first
+
+### LDAP Certificate Configuration
+
+For production use with Google LDAP:
+
+1. Download Google LDAP certificate
+2. Place in `freeradius/certs/google-ldap.crt`
+3. Update `freeradius/config/ldap` configuration
+
+### Firewall Configuration
+
+Allow the following ports:
+```bash
+# RADIUS Authentication
+sudo ufw allow 1812/udp
+
+# RADIUS Accounting
+sudo ufw allow 1813/udp
+
+# Web Dashboard (optional - use reverse proxy in production)
+sudo ufw allow 8080/tcp
+```
+
+## Dashboard Features
+
+### Authentication Logs
+- Real-time authentication attempts
+- VLAN assignment tracking
+- User type classification
+- Error categorization (password_wrong, invalid_domain, ldap_error, etc.)
+- Date range filtering
+- CSV export
+
+### Reports
+
+#### Daily Authentication Summary
+- Total attempts, success/failure counts
+- Hourly breakdown
+- VLAN distribution
+- Error type analysis
+
+#### Monthly Usage Report
+- Daily session statistics
+- Data usage tracking
+- Unique user counts
+
+#### Failed Login Report
+- Failed authentication patterns
+- Threshold-based filtering
+- Error type grouping
+
+#### User Type Distribution
+- Authentication patterns by user type
+- VLAN correlation analysis
+- Daily breakdown
+- Failed authentication trends
+
+#### System Health
+- Database statistics
+- Performance metrics
+- Active sessions
+- NAS device activity
+
+### User Management
+
+**Roles:**
+- **Superadmin**: Full system access including user management
+- **Netadmin**: User management and all reports
+- **Helpdesk**: Read-only access to reports and logs
+
+**Features:**
+- Create/Edit/Delete operators
+- Role-based permissions
+- Forced password changes
+- Audit trail
+
+## Database Schema
+
+### Core RADIUS Tables
+- `radpostauth`: Authentication attempts with VLAN and user type
+- `radacct`: Accounting/session data
+- `radcheck`: User credentials
+- `radreply`: User attributes
+- `nas`: Network Access Servers
+
+### Dashboard Tables
+- `operators`: Dashboard users
+- `daily_stats`: Pre-aggregated daily statistics
+
+### Enhanced Logging Fields
+- `vlan`: Assigned VLAN ID (only for successful authentications)
+- `user_type`: User classification (Student-MBA, Staff, etc.)
+- `error_type`: Categorized error reasons
+- `reply_message`: Detailed authentication result
+- `authdate_utc`: UTC timestamp for cross-timezone consistency
+
+## Troubleshooting
+
+### Authentication Issues
+
+**Check RADIUS logs:**
+```bash
+docker-compose logs -f freeradius
+```
+
+**Common issues:**
+1. **LDAP Connection Failed**: Verify LDAP credentials and firewall rules
+2. **Certificate Errors**: Ensure Google LDAP certificate is properly installed
+3. **No VLAN Assigned**: Check domain-config.json pattern matching
+4. **User Not Found**: Verify LDAP search filter and base DN
+
+### Dashboard Issues
+
+**Check webapp logs:**
+```bash
+docker-compose logs -f webapp
+```
+
+**Reset Admin Password:**
+```bash
+docker-compose exec mysql mysql -uroot -prootpassword123 radius -e \
+  "UPDATE operators SET password = MD5('admin123'), must_change_password = 1 WHERE username = 'admin';"
+```
+
+### Database Issues
+
+**Access MySQL console:**
+```bash
+docker-compose exec mysql mysql -uroot -prootpassword123 radius
+```
+
+**Reinitialize database:**
+```bash
+docker-compose down -v
+docker-compose up -d
+```
+
+## Performance Optimization
+
+### LDAP Caching
+
+LDAP responses are cached for 5 minutes to reduce load:
+```
+cache {
+    size = 2000
+    ttl = 300
+    max_entries = 2000
+}
+```
+
+### Database Indexes
+
+All critical query fields are indexed:
+- `idx_username`, `idx_authdate`, `idx_reply`
+- `idx_error_type`, `idx_vlan`, `idx_user_type`
+- Composite indexes for common query patterns
+
+### Connection Pooling
+
+LDAP connection pooling is configured for optimal performance:
+```
+pool {
+    start = 5
+    min = 5
+    max = 20
+    spare = 10
+}
+```
+
+## Security Best Practices
+
+1. **Change Default Credentials**: Always change admin password on first login
+2. **Use Strong RADIUS Secrets**: Generate cryptographically secure shared secrets
+3. **Enable HTTPS**: Use reverse proxy (nginx/Apache) with SSL/TLS in production
+4. **Restrict Database Access**: Firewall MySQL port in production
+5. **Regular Updates**: Keep Docker images and dependencies updated
+6. **Monitor Logs**: Review authentication logs for suspicious activity
+7. **Backup Database**: Implement regular database backups
+
+## Production Deployment
+
+### Using Reverse Proxy (Recommended)
+
+**Nginx Example:**
+```nginx
+server {
+    listen 443 ssl;
+    server_name radius.example.com;
+
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+### Environment Variables
+
+Update `.env` for production:
 ```env
-# .env file
-CACHE_TIMEOUT=3000   # 50 minutes (recommended)
-# CACHE_TIMEOUT=1800 # 30 minutes (more frequent LDAP checks)
-# CACHE_TIMEOUT=7200 # 2 hours (maximum performance)
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://radius.example.com
 ```
 
----
+### Resource Limits
 
-## 🧪 Testing
-
-### Automated Test Suite (NEW!)
-
-Run the complete test suite with one command:
-
-```bash
-# Run all tests
-./test.sh
-
-# Keep test environment running for debugging
-./test.sh --keep-running
-
-# Rebuild images before testing
-./test.sh --rebuild
+Adjust Docker resource limits in `docker-compose.yml`:
+```yaml
+services:
+  freeradius:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
 ```
 
-### What Gets Tested
-
-**RADIUS Authentication Tests:**
-- ✅ Successful authentication with valid credentials
-- ✅ Failed authentication with wrong password (error_type='password_wrong')
-- ✅ Failed authentication for non-existent user (error_type='user_not_found')
-- ✅ Database logging verification
-
-**RADIUS Accounting Tests:**
-- ✅ Accounting Start packet
-- ✅ Accounting Interim-Update packet
-- ✅ Accounting Stop packet
-- ✅ Database record verification
-
-**Web Application Tests:**
-- ✅ Login functionality
-- ✅ Dashboard access
-- ✅ All page navigation
-- ✅ CSV export
-- ✅ PDF export (reports)
-- ✅ Logout and session management
-
-### Test Environment
-
-The test suite uses Docker Compose to create an isolated environment:
-
-- **MySQL Test Database** (port 3307)
-- **FreeRADIUS Test Server** (ports 1812/1813)
-- **Web Application** (port 8080)
-- **Test Client** (with radclient, curl, mysql-client)
-
-All test data is automatically created and cleaned up.
-
-**📖 See [TESTING.md](TESTING.md) for complete testing documentation.**
-
----
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**1. Slow Authentication (> 5 seconds)**
-```bash
-# Check cache is working
-docker logs freeradius-google-ldap 2>&1 | grep "ldap_cache"
-# Should see: "Found cached entry" for subsequent auth
-
-# Verify connection pool
-docker logs freeradius-google-ldap 2>&1 | grep "pool"
-# Should see: "start = 10"
-```
-
-**2. LDAP Connection Failed**
-```bash
-# Test Google LDAP connectivity
-docker exec freeradius-google-ldap ping ldap.google.com
-docker exec freeradius-google-ldap openssl s_client -connect ldap.google.com:636
-
-# Check certificates
-ls -l certs/
-# ldap-client.crt (644)
-# ldap-client.key (600)
-```
-
-**3. Generic "Unable to Connect" Error**
-```bash
-# Enable debug mode to see what's happening
-docker exec -it freeradius-google-ldap freeradius -X
-
-# Look for Module-Failure-Message and Reply-Message
-```
-
-**4. Container Won't Start**
-```bash
-# Check logs
-docker-compose logs freeradius
-
-# Verify configuration
-docker-compose config
-
-# Rebuild
-docker-compose down
-docker-compose up -d --build
-```
-
-### Debug Mode
-
-```bash
-# Run FreeRADIUS in foreground with full debug
-docker exec -it freeradius-google-ldap freeradius -X
-
-# Monitor with helper script
-cd helper-scripts
-.\monitor-radius.ps1
-
-# Check specific user
-docker logs freeradius-google-ldap 2>&1 | grep "user@yourdomain.com"
-```
-
----
-
-## 📞 Support
-
-- 📖 **Documentation**: Check [OPTIMIZATION_SUMMARY.md](OPTIMIZATION_SUMMARY.md) for detailed guide
-- 🐛 **Issues**: [GitHub Issues](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/issues)
-- 💬 **Questions**: [GitHub Discussions](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/discussions)
-- 📚 **Archived Docs**: See [docs-archive/](docs-archive/) for detailed feature guides
-
----
-
-## 🔐 Security
-
-### Production Checklist
-
-- [ ] Change `SHARED_SECRET` (RADIUS secret)
-- [ ] Change `DB_ROOT_PASSWORD` and `DB_PASSWORD`
-- [ ] Change `ADMIN_PASSWORD`
-- [ ] Update `ACCESS_ALLOWED_CIDR` to restrict access
-- [ ] Enable HTTPS for dashboard (use reverse proxy)
-- [ ] Set up daily backups
-- [ ] Monitor logs for suspicious activity
-- [ ] Rotate passwords every 90 days
+## Maintenance
 
 ### Backup
 
+**Database backup:**
 ```bash
-# Database
-docker exec radius-mysql mysqldump -u root -p${DB_ROOT_PASSWORD} radius > backup.sql
-
-# Configuration
-tar -czf config_backup.tar.gz .env configs/ certs/
+docker-compose exec mysql mysqldump -uroot -prootpassword123 radius > backup_$(date +%Y%m%d).sql
 ```
 
+**Configuration backup:**
+```bash
+tar -czf config_backup_$(date +%Y%m%d).tar.gz freeradius/config .env
+```
+
+### Log Rotation
+
+Logs are managed by Docker's logging driver. Configure in `docker-compose.yml`:
+```yaml
+logging:
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+```
+
+### Database Cleanup
+
+Archive old authentication logs:
+```sql
+-- Archive records older than 90 days
+INSERT INTO radpostauth_archive
+SELECT * FROM radpostauth WHERE authdate < DATE_SUB(NOW(), INTERVAL 90 DAY);
+
+DELETE FROM radpostauth WHERE authdate < DATE_SUB(NOW(), INTERVAL 90 DAY);
+```
+
+## API Integration
+
+### Querying Authentication Logs
+
+The dashboard doesn't expose a REST API, but you can query the database directly:
+
+```sql
+-- Recent authentications for a user
+SELECT username, authdate, reply, vlan, user_type, error_type
+FROM radpostauth
+WHERE username = 'user@example.com'
+ORDER BY authdate DESC
+LIMIT 10;
+
+-- Daily success rate
+SELECT
+    DATE(authdate) as date,
+    COUNT(*) as total,
+    SUM(CASE WHEN reply = 'Access-Accept' THEN 1 ELSE 0 END) as successful,
+    ROUND(SUM(CASE WHEN reply = 'Access-Accept' THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) as success_rate
+FROM radpostauth
+WHERE DATE(authdate) BETWEEN '2025-01-01' AND '2025-01-31'
+GROUP BY DATE(authdate);
+```
+
+## Support and Documentation
+
+- **Archived Documentation**: See `docs-archive/` for detailed implementation guides
+- **FreeRADIUS Documentation**: https://freeradius.org/documentation/
+- **Google LDAP**: https://support.google.com/a/answer/9048434
+
+## License
+
+[Specify your license here]
+
+## Contributors
+
+[List contributors here]
+
+## Changelog
+
+See `docs-archive/` for detailed change history.
+
 ---
 
-## 📝 License
-
-MIT License - Copyright © 2025 **Senthil Prabhu K (SenthilNasa)**
-
-See [LICENSE](LICENSE) file for details.
-
----
-
-## 🌟 Show Your Support
-
-If this project helps you, please give it a star ⭐
-
-[![GitHub stars](https://img.shields.io/github/stars/senthilnasa/freeradius-google-ldap-dashboard?style=social)](https://github.com/senthilnasa/freeradius-google-ldap-dashboard/stargazers)
-
----
-
-## 📚 Additional Resources
-
-- [FreeRADIUS Documentation](https://freeradius.org/documentation/)
-- [Google Secure LDAP Setup](https://support.google.com/a/answer/9048434)
-- [Docker Compose Reference](https://docs.docker.com/compose/)
-
----
-
-**Made with ❤️ by Senthil Prabhu K**
-
-*Enterprise WiFi Authentication Made Simple*
+**Last Updated**: December 2025
+**Version**: 2.0.0

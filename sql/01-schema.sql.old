@@ -1,0 +1,412 @@
+-- ============================================================================
+-- FreeRADIUS Database Schema and Initial Data
+-- Auto-run on MySQL container first startup
+-- ============================================================================
+
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS radius CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE radius;
+
+-- ============================================================================
+-- RADIUS Tables (FreeRADIUS Standard Schema)
+-- ============================================================================
+
+-- NAS (Network Access Servers) Table
+CREATE TABLE IF NOT EXISTS nas (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nasname VARCHAR(128) NOT NULL,
+    shortname VARCHAR(32),
+    type VARCHAR(30) DEFAULT 'other',
+    ports INT,
+    secret VARCHAR(60) NOT NULL DEFAULT 'secret',
+    server VARCHAR(64),
+    community VARCHAR(50),
+    description VARCHAR(200) DEFAULT 'RADIUS Client',
+    INDEX nasname (nasname)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- User Check Attributes
+CREATE TABLE IF NOT EXISTS radcheck (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(64) NOT NULL DEFAULT '',
+    attribute VARCHAR(64) NOT NULL DEFAULT '',
+    op CHAR(2) NOT NULL DEFAULT '==',
+    value VARCHAR(253) NOT NULL DEFAULT '',
+    INDEX username (username(32))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- User Reply Attributes
+CREATE TABLE IF NOT EXISTS radreply (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(64) NOT NULL DEFAULT '',
+    attribute VARCHAR(64) NOT NULL DEFAULT '',
+    op CHAR(2) NOT NULL DEFAULT '=',
+    value VARCHAR(253) NOT NULL DEFAULT '',
+    INDEX username (username(32))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Group Check Attributes
+CREATE TABLE IF NOT EXISTS radgroupcheck (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    groupname VARCHAR(64) NOT NULL DEFAULT '',
+    attribute VARCHAR(64) NOT NULL DEFAULT '',
+    op CHAR(2) NOT NULL DEFAULT '==',
+    value VARCHAR(253) NOT NULL DEFAULT '',
+    INDEX groupname (groupname(32))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Group Reply Attributes
+CREATE TABLE IF NOT EXISTS radgroupreply (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    groupname VARCHAR(64) NOT NULL DEFAULT '',
+    attribute VARCHAR(64) NOT NULL DEFAULT '',
+    op CHAR(2) NOT NULL DEFAULT '=',
+    value VARCHAR(253) NOT NULL DEFAULT '',
+    INDEX groupname (groupname(32))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- User to Group Mapping
+CREATE TABLE IF NOT EXISTS radusergroup (
+    username VARCHAR(64) NOT NULL DEFAULT '',
+    groupname VARCHAR(64) NOT NULL DEFAULT '',
+    priority INT NOT NULL DEFAULT 1,
+    INDEX username (username(32))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Authentication Log with VLAN and Error Tracking
+CREATE TABLE IF NOT EXISTS radpostauth (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(64) NOT NULL DEFAULT '',
+    pass VARCHAR(64) NOT NULL DEFAULT '',
+    reply VARCHAR(32) NOT NULL DEFAULT '',
+    reply_message TEXT,
+    error_type VARCHAR(64) DEFAULT NULL COMMENT 'Categorized error type (password_wrong, invalid_domain, etc.)',
+    vlan VARCHAR(16) DEFAULT NULL COMMENT 'Assigned VLAN ID from Tunnel-Private-Group-Id',
+    authdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    authdate_utc TIMESTAMP NULL DEFAULT NULL COMMENT 'UTC timestamp for timezone-independent tracking',
+    INDEX username (username),
+    INDEX authdate (authdate),
+    INDEX reply (reply),
+    INDEX error_type (error_type),
+    INDEX vlan (vlan)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Accounting Table
+CREATE TABLE IF NOT EXISTS radacct (
+    radacctid BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    acctsessionid VARCHAR(64) NOT NULL DEFAULT '',
+    acctuniqueid VARCHAR(32) NOT NULL DEFAULT '',
+    username VARCHAR(64) NOT NULL DEFAULT '',
+    groupname VARCHAR(64) NOT NULL DEFAULT '',
+    realm VARCHAR(64) DEFAULT '',
+    nasipaddress VARCHAR(15) NOT NULL DEFAULT '',
+    nasportid VARCHAR(15),
+    nasporttype VARCHAR(32),
+    acctstarttime DATETIME NULL DEFAULT NULL,
+    acctupdatetime DATETIME NULL DEFAULT NULL,
+    acctstoptime DATETIME NULL DEFAULT NULL,
+    acctinterval INT,
+    acctsessiontime INT UNSIGNED,
+    acctauthentic VARCHAR(32),
+    connectinfo_start VARCHAR(50),
+    connectinfo_stop VARCHAR(50),
+    acctinputoctets BIGINT,
+    acctoutputoctets BIGINT,
+    calledstationid VARCHAR(50) NOT NULL DEFAULT '',
+    callingstationid VARCHAR(50) NOT NULL DEFAULT '',
+    acctterminatecause VARCHAR(32) NOT NULL DEFAULT '',
+    servicetype VARCHAR(32),
+    framedprotocol VARCHAR(32),
+    framedipaddress VARCHAR(15) NOT NULL DEFAULT '',
+    INDEX username (username),
+    INDEX framedipaddress (framedipaddress),
+    INDEX acctsessionid (acctsessionid),
+    INDEX acctuniqueId (acctuniqueid),
+    INDEX acctstarttime (acctstarttime),
+    INDEX acctstoptime (acctstoptime),
+    INDEX nasipaddress (nasipaddress)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================================
+-- Management Tables
+-- ============================================================================
+
+-- Operators/Admin Users Table
+CREATE TABLE IF NOT EXISTS operators (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(32) NOT NULL,
+    password VARCHAR(255) NOT NULL COMMENT 'Supports MD5 (32 chars) or SHA-256 (64 chars)',
+    firstname VARCHAR(50) DEFAULT '',
+    lastname VARCHAR(50) DEFAULT '',
+    title VARCHAR(32) DEFAULT '',
+    department VARCHAR(32) DEFAULT '',
+    company VARCHAR(32) DEFAULT '',
+    phone1 VARCHAR(32) DEFAULT '',
+    phone2 VARCHAR(32) DEFAULT '',
+    email VARCHAR(128) DEFAULT NULL,
+    email1 VARCHAR(32) DEFAULT '',
+    email2 VARCHAR(32) DEFAULT '',
+    messenger1 VARCHAR(32) DEFAULT '',
+    messenger2 VARCHAR(32) DEFAULT '',
+    notes VARCHAR(128) DEFAULT '',
+    changeuserinfo INT DEFAULT 0,
+    createusers INT DEFAULT 0 COMMENT '1 = Superadmin, can create other users',
+    creationdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    creationby VARCHAR(64) DEFAULT NULL,
+    updatedate TIMESTAMP NULL DEFAULT NULL,
+    updateby VARCHAR(64) DEFAULT NULL,
+    must_change_password TINYINT(1) DEFAULT 0 COMMENT 'Force password change on next login',
+    password_changed_at DATETIME DEFAULT NULL COMMENT 'Last password change timestamp',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    is_active TINYINT(1) DEFAULT 1 COMMENT 'Account active status',
+    UNIQUE KEY username (username),
+    INDEX is_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- User Information Table (Extended RADIUS user data)
+CREATE TABLE IF NOT EXISTS userinfo (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(128) NOT NULL,
+    firstname VARCHAR(200) DEFAULT '',
+    lastname VARCHAR(200) DEFAULT '',
+    email VARCHAR(200) DEFAULT '',
+    department VARCHAR(200) DEFAULT '',
+    company VARCHAR(200) DEFAULT '',
+    workphone VARCHAR(200) DEFAULT '',
+    homephone VARCHAR(200) DEFAULT '',
+    mobilephone VARCHAR(200) DEFAULT '',
+    address VARCHAR(200) DEFAULT '',
+    city VARCHAR(200) DEFAULT '',
+    state VARCHAR(200) DEFAULT '',
+    country VARCHAR(100) DEFAULT '',
+    zip VARCHAR(200) DEFAULT '',
+    notes TEXT,
+    changeuserinfo VARCHAR(128) DEFAULT '0',
+    portalloginpassword VARCHAR(128) DEFAULT '',
+    enableportallogin INT DEFAULT 0,
+    creationdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    creationby VARCHAR(128) DEFAULT '',
+    updatedate TIMESTAMP NULL DEFAULT NULL,
+    updateby VARCHAR(128) DEFAULT '',
+    UNIQUE KEY username (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================================
+-- Reporting and Analytics Tables
+-- ============================================================================
+
+-- Daily Statistics Summary
+CREATE TABLE IF NOT EXISTS daily_stats (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    stat_date DATE NOT NULL,
+    total_authentications INT DEFAULT 0,
+    successful_authentications INT DEFAULT 0,
+    failed_authentications INT DEFAULT 0,
+    unique_users INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY stat_date (stat_date),
+    INDEX idx_stat_date (stat_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Authentication Error Summary
+CREATE TABLE IF NOT EXISTS auth_error_summary (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    error_date DATE NOT NULL,
+    error_type VARCHAR(64) NOT NULL,
+    error_count INT DEFAULT 0,
+    affected_users INT DEFAULT 0,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY date_error (error_date, error_type),
+    INDEX idx_error_date (error_date),
+    INDEX idx_error_type (error_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- NAS Statistics
+CREATE TABLE IF NOT EXISTS nas_statistics (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nas_ip VARCHAR(15) NOT NULL,
+    stat_date DATE NOT NULL,
+    total_requests INT DEFAULT 0,
+    successful_auths INT DEFAULT 0,
+    failed_auths INT DEFAULT 0,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY nas_date (nas_ip, stat_date),
+    INDEX idx_nas_ip (nas_ip),
+    INDEX idx_stat_date (stat_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================================
+-- Views for Reporting
+-- ============================================================================
+
+-- Active Sessions View
+CREATE OR REPLACE VIEW active_sessions AS
+SELECT
+    username,
+    nasipaddress,
+    nasportid,
+    framedipaddress,
+    callingstationid,
+    acctstarttime,
+    TIMESTAMPDIFF(SECOND, acctstarttime, NOW()) AS session_duration,
+    acctinputoctets,
+    acctoutputoctets,
+    (acctinputoctets + acctoutputoctets) AS total_bytes
+FROM radacct
+WHERE acctstoptime IS NULL
+ORDER BY acctstarttime DESC;
+
+-- Recent Failed Authentications View
+CREATE OR REPLACE VIEW recent_failed_auth AS
+SELECT
+    username,
+    error_type,
+    reply_message,
+    vlan,
+    authdate,
+    authdate_utc
+FROM radpostauth
+WHERE reply != 'Access-Accept'
+ORDER BY authdate DESC
+LIMIT 100;
+
+-- User Session Summary View
+CREATE OR REPLACE VIEW user_session_summary AS
+SELECT
+    username,
+    COUNT(*) AS total_sessions,
+    SUM(acctsessiontime) AS total_time_seconds,
+    SUM(acctinputoctets + acctoutputoctets) AS total_bytes,
+    MAX(acctstarttime) AS last_session,
+    MIN(acctstarttime) AS first_session
+FROM radacct
+WHERE acctstoptime IS NOT NULL
+GROUP BY username;
+
+-- User Bandwidth Today View
+CREATE OR REPLACE VIEW user_bandwidth_today AS
+SELECT
+    username,
+    SUM(acctinputoctets) AS download_bytes,
+    SUM(acctoutputoctets) AS upload_bytes,
+    SUM(acctinputoctets + acctoutputoctets) AS total_bytes,
+    COUNT(*) AS session_count
+FROM radacct
+WHERE DATE(acctstarttime) = CURDATE()
+GROUP BY username;
+
+-- ============================================================================
+-- Billing/Plans Table (Optional)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS billing_plans (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    plan_name VARCHAR(64) NOT NULL,
+    bandwidth_limit BIGINT COMMENT 'Monthly bandwidth limit in bytes',
+    session_timeout INT COMMENT 'Max session time in seconds',
+    idle_timeout INT COMMENT 'Idle timeout in seconds',
+    monthly_fee DECIMAL(10,2),
+    description TEXT,
+    vlan_id VARCHAR(16) COMMENT 'Default VLAN for this plan',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active TINYINT(1) DEFAULT 1,
+    UNIQUE KEY plan_name (plan_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================================
+-- Initial Data
+-- ============================================================================
+
+-- Create default admin user
+-- Username: admin
+-- Password: admin123 (MD5 hash: 0192023a7bbd73250516f069df18b500)
+INSERT INTO operators
+    (username, password, firstname, lastname, email, createusers, is_active, must_change_password)
+VALUES
+    ('admin', '0192023a7bbd73250516f069df18b500', 'System', 'Administrator', 'admin@localhost', 1, 1, 0)
+ON DUPLICATE KEY UPDATE
+    password = '0192023a7bbd73250516f069df18b500',
+    is_active = 1,
+    createusers = 1;
+
+-- Add localhost as default NAS for testing
+INSERT INTO nas (nasname, shortname, type, ports, secret, description)
+VALUES
+    ('127.0.0.1', 'localhost', 'other', 1812, 'testing123', 'Local testing NAS'),
+    ('::1', 'localhost-ipv6', 'other', 1812, 'testing123', 'Local testing NAS (IPv6)')
+ON DUPLICATE KEY UPDATE
+    secret = VALUES(secret),
+    description = VALUES(description);
+
+-- ============================================================================
+-- Stored Procedures for Maintenance
+-- ============================================================================
+
+-- Procedure to clean old accounting records
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS cleanup_old_accounting(IN days_to_keep INT)
+BEGIN
+    DELETE FROM radacct
+    WHERE acctstoptime IS NOT NULL
+      AND acctstoptime < DATE_SUB(NOW(), INTERVAL days_to_keep DAY);
+
+    SELECT ROW_COUNT() AS deleted_records;
+END //
+DELIMITER ;
+
+-- Procedure to update daily statistics
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS update_daily_stats(IN target_date DATE)
+BEGIN
+    INSERT INTO daily_stats (stat_date, total_authentications, successful_authentications, failed_authentications, unique_users)
+    SELECT
+        DATE(authdate) AS stat_date,
+        COUNT(*) AS total_authentications,
+        SUM(CASE WHEN reply = 'Access-Accept' THEN 1 ELSE 0 END) AS successful_authentications,
+        SUM(CASE WHEN reply != 'Access-Accept' THEN 1 ELSE 0 END) AS failed_authentications,
+        COUNT(DISTINCT username) AS unique_users
+    FROM radpostauth
+    WHERE DATE(authdate) = target_date
+    GROUP BY DATE(authdate)
+    ON DUPLICATE KEY UPDATE
+        total_authentications = VALUES(total_authentications),
+        successful_authentications = VALUES(successful_authentications),
+        failed_authentications = VALUES(failed_authentications),
+        unique_users = VALUES(unique_users);
+END //
+DELIMITER ;
+
+-- ============================================================================
+-- Grants and Permissions
+-- ============================================================================
+
+-- Grant all privileges to radius user on radius database
+GRANT ALL PRIVILEGES ON radius.* TO 'radius'@'%';
+FLUSH PRIVILEGES;
+
+-- ============================================================================
+-- Indexes for Performance
+-- ============================================================================
+
+-- Additional indexes for frequently queried columns
+ALTER TABLE radpostauth ADD INDEX IF NOT EXISTS idx_username_date (username, authdate);
+ALTER TABLE radpostauth ADD INDEX IF NOT EXISTS idx_reply_date (reply, authdate);
+ALTER TABLE radacct ADD INDEX IF NOT EXISTS idx_username_start (username, acctstarttime);
+ALTER TABLE radacct ADD INDEX IF NOT EXISTS idx_session_time (acctsessiontime);
+
+-- ============================================================================
+-- Database Information
+-- ============================================================================
+
+SELECT '========================================' AS '';
+SELECT 'FreeRADIUS Database Initialized' AS 'Status';
+SELECT '========================================' AS '';
+SELECT DATABASE() AS 'Current Database';
+SELECT COUNT(*) AS 'Total Tables' FROM information_schema.tables WHERE table_schema = 'radius';
+SELECT COUNT(*) AS 'Total Views' FROM information_schema.views WHERE table_schema = 'radius';
+SELECT '========================================' AS '';
+SELECT 'Default Admin Credentials:' AS '';
+SELECT '  Username: admin' AS '';
+SELECT '  Password: admin123' AS '';
+SELECT '========================================' AS '';

@@ -100,6 +100,35 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- User Type Distribution Report -->
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-user-tag text-info"></i> User Type Distribution Report
+                                    </h5>
+                                    <p class="card-text text-muted">Analyze authentication patterns and user distribution by type (Student-MBA, Staff, etc.).</p>
+                                    <form method="GET" action="">
+                                        <input type="hidden" name="page" value="reports">
+                                        <input type="hidden" name="action" value="user-type-distribution">
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <input type="date" name="from_date" class="form-control" value="<?= date('Y-m-d', strtotime('-30 days')) ?>" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="date" name="to_date" class="form-control" value="<?= date('Y-m-d') ?>" required>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button class="btn btn-info w-100" type="submit">
+                                                    <i class="fas fa-arrow-right"></i> View Report
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

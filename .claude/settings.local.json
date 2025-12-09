@@ -21,7 +21,8 @@
       "Bash(md5sum:*)",
       "Bash(php -r:*)",
       "Bash(python3:*)",
-      "Bash(docker cp:*)"
+      "Bash(docker cp:*)",
+      "Bash(docker builder prune -f)"
     ],
     "deny": [],
     "ask": []

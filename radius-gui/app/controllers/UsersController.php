@@ -46,7 +46,7 @@ class UsersController
             $op['role'] = $this->getUserRole($op);
         }
 
-        require APP_PATH . '/views/users/index.php';
+        require APP_PATH . '/views/users/list.php';
     }
 
     public function createAction()

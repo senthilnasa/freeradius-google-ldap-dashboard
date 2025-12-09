@@ -78,6 +78,7 @@
                             <th>Username</th>
                             <th>Result</th>
                             <th>VLAN</th>
+                            <th>User Type</th>
                             <th>Error Type</th>
                             <th>Message</th>
                         </tr>
@@ -105,6 +106,15 @@
                                     <?php if (!empty($log['vlan']) && $log['reply'] === 'Access-Accept'): ?>
                                         <span class="badge bg-info">
                                             <i class="fas fa-network-wired"></i> <?= Utils::e($log['vlan']) ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php if (!empty($log['user_type']) && $log['reply'] === 'Access-Accept'): ?>
+                                        <span class="badge bg-primary">
+                                            <i class="fas fa-user-tag"></i> <?= Utils::e($log['user_type']) ?>
                                         </span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>

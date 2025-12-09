@@ -29,7 +29,7 @@ class ReportsController
 
         // Get daily stats
         $stats = $this->db->fetchOne(
-            "SELECT * FROM daily_stats WHERE date = ?",
+            "SELECT * FROM daily_stats WHERE stat_date = ?",
             [$date]
         );
 
@@ -311,6 +311,107 @@ class ReportsController
         }
 
         require APP_PATH . '/views/reports/system-health.php';
+    }
+
+    public function userTypeDistributionAction()
+    {
+        $pageTitle = 'User Type Distribution Report';
+
+        $fromDate = Utils::get('from_date', date('Y-m-d', strtotime('-30 days')));
+        $toDate = Utils::get('to_date', date('Y-m-d'));
+
+        // Get user type distribution (successful authentications only)
+        $userTypeStats = $this->db->fetchAll(
+            "SELECT
+                user_type,
+                COUNT(*) as auth_count,
+                COUNT(DISTINCT username) as unique_users,
+                COUNT(DISTINCT DATE(authdate)) as active_days
+            FROM radpostauth
+            WHERE DATE(authdate) BETWEEN ? AND ?
+              AND reply = 'Access-Accept'
+              AND user_type IS NOT NULL
+              AND user_type != ''
+            GROUP BY user_type
+            ORDER BY auth_count DESC",
+            [$fromDate, $toDate]
+        );
+
+        // Calculate totals
+        $totalAuths = array_sum(array_column($userTypeStats, 'auth_count'));
+        $totalUsers = array_sum(array_column($userTypeStats, 'unique_users'));
+
+        // Get user type with VLAN correlation
+        $userTypeVlan = $this->db->fetchAll(
+            "SELECT
+                user_type,
+                vlan,
+                COUNT(*) as count
+            FROM radpostauth
+            WHERE DATE(authdate) BETWEEN ? AND ?
+              AND reply = 'Access-Accept'
+              AND user_type IS NOT NULL
+              AND user_type != ''
+            GROUP BY user_type, vlan
+            ORDER BY user_type, count DESC",
+            [$fromDate, $toDate]
+        );
+
+        // Get daily breakdown by user type
+        $dailyBreakdown = $this->db->fetchAll(
+            "SELECT
+                DATE(authdate) as date,
+                user_type,
+                COUNT(*) as auth_count
+            FROM radpostauth
+            WHERE DATE(authdate) BETWEEN ? AND ?
+              AND reply = 'Access-Accept'
+              AND user_type IS NOT NULL
+              AND user_type != ''
+            GROUP BY DATE(authdate), user_type
+            ORDER BY date DESC, auth_count DESC",
+            [$fromDate, $toDate]
+        );
+
+        // Get failed authentications by inferred user type (based on username pattern)
+        $failedByType = $this->db->fetchAll(
+            "SELECT
+                CASE
+                    WHEN username LIKE '%.mba@%' THEN 'Student-MBA'
+                    WHEN username LIKE '%.sias@%' THEN 'Student-SIAS'
+                    WHEN username LIKE '%.bba@%' THEN 'Student-BBA'
+                    WHEN username LIKE '%.phd@%' THEN 'Student-Ph D'
+                    WHEN username LIKE '%@krea.edu.in' THEN 'Staff'
+                    ELSE 'Others'
+                END as inferred_type,
+                error_type,
+                COUNT(*) as failure_count
+            FROM radpostauth
+            WHERE DATE(authdate) BETWEEN ? AND ?
+              AND reply != 'Access-Accept'
+            GROUP BY inferred_type, error_type
+            ORDER BY failure_count DESC",
+            [$fromDate, $toDate]
+        );
+
+        // Handle PDF export
+        // TODO: Implement PDF export for user type distribution report
+        /*
+        if (Utils::get('export') === 'pdf') {
+            require_once APP_PATH . '/helpers/PdfHelper.php';
+            PdfHelper::generateUserTypeDistributionReport(
+                $fromDate,
+                $toDate,
+                $userTypeStats,
+                $totalAuths,
+                $totalUsers,
+                $userTypeVlan,
+                $failedByType
+            );
+        }
+        */
+
+        require APP_PATH . '/views/reports/user-type-distribution.php';
     }
 
     private function getDatabaseSize()
