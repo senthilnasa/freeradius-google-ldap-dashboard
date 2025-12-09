@@ -470,10 +470,8 @@ VALUES
 -- GRANTS AND PERMISSIONS
 -- ============================================================================
 
--- Ensure radius user has all necessary privileges
-GRANT ALL PRIVILEGES ON radius.* TO 'radius'@'%';
-GRANT ALL PRIVILEGES ON radius.* TO 'radius'@'localhost';
-FLUSH PRIVILEGES;
+-- Note: User grants are handled by docker-entrypoint.sh
+-- No additional grants needed here
 
 -- ============================================================================
 -- DATABASE INITIALIZATION COMPLETE

@@ -121,12 +121,14 @@
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <?php if (!empty($log['error_type'])): ?>
+                                    <?php if ($log['reply'] === 'Access-Accept'): ?>
+                                        <span class="text-muted">-</span>
+                                    <?php elseif (!empty($log['error_type'])): ?>
                                         <span class="badge bg-warning text-dark">
                                             <?= Utils::e(ucwords(str_replace('_', ' ', $log['error_type']))) ?>
                                         </span>
                                     <?php else: ?>
-                                        -
+                                        <span class="badge bg-secondary">Unknown Error</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
