@@ -154,30 +154,10 @@ authorize {
 #	smbpasswd
 
 	#
-	#  LDAP Credential Caching for Performance
-	#  Check cache first before querying LDAP server
-	#  This significantly reduces authentication time and LDAP server load
+	#  The ldap module reads passwords from the LDAP database.
+	#  For Google LDAP with PEAP-GTC: Uses LDAP bind authentication
 	#
-	ldap_cache
-
-	#
-	#  If cache miss, query LDAP server
-	#
-	if (!ok) {
-		#
-		#  The ldap module reads passwords from the LDAP database.
-		#  Only called if cache miss
-		ldap
-		
-		#
-		#  Populate cache after successful LDAP lookup
-		#  This stores user info for quick access on next authentication
-		#
-		if (ok || updated) {
-			# Update the cache with fresh LDAP data
-			ldap_cache
-		}
-	}
+	ldap
 
 	#
 	#  For Google LDAP: Hybrid authentication support

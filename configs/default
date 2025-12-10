@@ -438,26 +438,15 @@ authorize {
 	# Example: [{"domain":"staff.yourdomain.com","Type":"Staff","VLAN":"10"},{"domain":"students.yourdomain.com","Type":"Student","VLAN":"20"}]
 	
 	if (&request:Tmp-String-0) {
-		# Try cache first for fast authentication
-		ldap_cache {
-			ok = return
-		}
-		
-		# Cache miss - query SQL and LDAP
-		sql
+		# Query LDAP for authentication
 		ldap
 		
-		# Populate cache after successful LDAP lookup
 		if (ok || updated) {
-			ldap_cache
-		}
-		
-		if ((ok || updated) && User-Password && !control:Auth-Type) {
 			update control {
 				Auth-Type := ldap
-				LDAP-UserDn := "%{User-Name}"
 			}
-			# Domain-specific VLAN assignments will be inserted here by init.sh
+		}
+		# Domain-specific VLAN assignments will be inserted here by init.sh
 		}
 	}
 	else {

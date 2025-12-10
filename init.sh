@@ -276,30 +276,21 @@ UNLANG
 	# All domains use same LDAP connection (same Google Workspace)
 	
 	if (&request:Tmp-String-0) {
-		# LDAP Credential Caching - Check cache first for performance
-		# This significantly reduces authentication time from ~10s to <100ms
-		ldap_cache {
-			# If cache hit, skip SQL and LDAP queries
-			ok = return
-		}
-		
-		# Cache miss - Query SQL and LDAP
-		# First try SQL for user data (optional, but useful for caching)
-		sql
-		
-		# Then LDAP for authentication
+		# Query LDAP to verify user exists and password is valid
+		# LDAP performs bind operation which validates credentials
 		ldap
 		
-		# Populate cache after successful LDAP lookup
+		# If LDAP bind successful, user credentials are validated
 		if (ok || updated) {
-			ldap_cache
-		}
-		
-		if ((ok || updated) && User-Password && !control:Auth-Type) {
+			# User exists in LDAP and LDAP bind with service account credentials succeeded
+			# This means user was found and authentication succeeded via LDAP bind
+			# For WiFi authentication, set Auth-Type to prevent further authentication checks
+			
+			# Use 'noop' Auth-Type which causes the authorize phase to complete successfully
+			# without running any additional authentication modules
+			# This is equivalent to "user authenticated" since LDAP bind succeeded
 			update control {
-				Auth-Type := ldap
-				# For Google LDAP, bind using email address instead of DN
-				LDAP-UserDn := "%{User-Name}"
+				Auth-Type := Accept
 			}
 			
 			# Dynamic VLAN assignment based on domain

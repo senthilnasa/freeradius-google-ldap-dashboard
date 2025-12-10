@@ -30,7 +30,9 @@ ldap {
 
 	#  Unless overridden in another section, the dn from which all
 	#  searches will start from.
-	#  Since all domains are under same Google Workspace, we search broadly
+	#  For Google Workspace with multiple domains:
+	#  - Uses primary domain as base DN (set in LDAP_BASE_DN env variable)
+	#  - With scope='sub', searches across ALL domains in the workspace
 	base_dn = 'dc=BASE_DOMAIN,dc=DOMAIN_EXTENSION'
 
 	#
@@ -204,8 +206,13 @@ ldap {
 		#
 		#  For Google LDAP supporting multiple domains in same workspace
 		#  Search for users from all configured domains (set in DOMAIN_CONFIG env variable)
+		#  Using 'mail' attribute to match full email addresses across all domains
 		#
-		filter = "(|(mail=%{User-Name})(uid=%{%{Stripped-User-Name}:-%{User-Name}}))"
+		filter = "(mail=%{User-Name})"
+
+		#  Search scope - MUST be 'sub' to search recursively across all domains
+		#  This allows finding users across all domains configured in DOMAIN_CONFIG
+		scope = 'sub'
 
 		#  SASL parameters to use for user binds
 		#
@@ -225,9 +232,6 @@ ldap {
 			# SASL realm. Used for kerberos.
 #			realm = 'example.org'
 		}
-
-		#  Search scope, may be 'base', 'one', sub' or 'children'
-#		scope = 'sub'
 
 		#  Server side result sorting
 		#
