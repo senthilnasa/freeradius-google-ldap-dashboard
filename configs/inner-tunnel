@@ -56,6 +56,17 @@ authorize {
 	filter_username
 
 	#
+	#  Block anonymous identity from being used for authentication
+	#  Anonymous is only for outer identity, not for actual login
+	#
+	if (&User-Name =~ /^anonymous@/) {
+		update reply {
+			Reply-Message := "Anonymous identity cannot be used for authentication"
+		}
+		reject
+	}
+
+	#
 	#  Do checks on outer / inner User-Name, so that users
 	#  can't spoof us by using incompatible identities
 	#
