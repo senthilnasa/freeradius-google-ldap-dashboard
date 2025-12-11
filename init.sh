@@ -96,8 +96,9 @@ sed -i "s|ENV_ENABLE_SQL_TRACE|${ENABLE_SQL_TRACE:-no}|g" /etc/freeradius/mods-a
 sed -i "s|ENV_DB_MAX_CONNECTIONS|${DB_MAX_CONNECTIONS:-20}|g" /etc/freeradius/mods-available/sql
 
 # Configure cache TTL from environment variable
-echo "Configuring cache with TTL=${CACHE_TIMEOUT:-300} seconds..."
-sed -i "s|ENV_CACHE_TTL|${CACHE_TIMEOUT:-300}|g" /etc/freeradius/mods-available/cache
+# Industry standard for 2k-3k concurrent users: 600-900 seconds (10-15 minutes)
+echo "Configuring cache with TTL=${CACHE_TTL:-600} seconds..."
+sed -i "s|ENV_CACHE_TTL|${CACHE_TTL:-600}|g" /etc/freeradius/mods-available/cache
 
 # Configure password logging based on environment
 # Control sensitive data logging in SQL queries (passwords)

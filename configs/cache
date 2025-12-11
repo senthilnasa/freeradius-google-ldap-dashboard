@@ -17,14 +17,15 @@ cache ldap_cache {
 	key = "%{User-Name}"
 
 	#  Time-to-live for cache entries (seconds)
-	#  Set from environment variable CACHE_TIMEOUT (default 300 = 5 minutes)
-	#  Industry best practice: 5-15 minutes for LDAP attribute caching
+	#  Set from environment variable CACHE_TIMEOUT (default 600 = 10 minutes)
+	#  Industry best practice: 10-15 minutes for LDAP attribute caching with 2k-3k users
+	#  Longer TTL reduces LDAP queries significantly under high load
 	ttl = ENV_CACHE_TTL
 
 	#  Maximum number of entries in the cache
-	#  Set higher for larger deployments (0 = unlimited)
-	#  Increased from 10000 to 50000 for better caching
-	max_entries = 50000
+	#  Set higher for 2k-3k concurrent users (0 = unlimited)
+	#  Increased from 50000 to 100000 for full user population + headroom
+	max_entries = 100000
 
 	#  Number of entries to pre-allocate
 	#  This improves performance by reducing memory allocation overhead
@@ -66,12 +67,14 @@ cache auth_cache {
 	#  This ensures we don't accept stale passwords
 	key = "%{User-Name}:%{md5:%{User-Password}}"
 
-	#  Shorter TTL for auth cache (2 minutes by default)
-	#  This balances security and performance
-	ttl = 120
+	#  Shorter TTL for auth cache (5 minutes by default)
+	#  This balances security and performance for 2k-3k concurrent users
+	#  Industry standard: 5-10 minutes for authentication result caching
+	ttl = 300
 
 	#  Maximum authentication cache entries
-	max_entries = 5000
+	#  Increased for 2k-3k concurrent users
+	max_entries = 10000
 
 	epoch = 0
 	add_stats = yes

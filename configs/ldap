@@ -511,21 +511,23 @@ ldap {
 		#sasl_secprops = 'noanonymous,noplain,maxssf=0'
 
 		#  Seconds to wait for LDAP query to finish. default: 20
-		#  Reduced for faster timeout detection
-		res_timeout = 5
+		#  Optimized for Google LDAP with high concurrency
+		#  Industry standard: 10-30 seconds for cloud LDAP services
+		res_timeout = 15
 
 		#  Seconds LDAP server has to process the query (server-side
 		#  time limit). default: 20
 		#
 		#  LDAP_OPT_TIMELIMIT is set to this value.
-		srv_timelimit = 5
+		#  Increased to accommodate Google LDAP under load
+		srv_timelimit = 15
 
 		#  Seconds to wait for response of the server. (network
 		#  failures) default: 10
 		#
 		#  LDAP_OPT_NETWORK_TIMEOUT is set to this value.
-		#  Increased for better Google LDAP connectivity
-		net_timeout = 3
+		#  Increased for better Google LDAP connectivity under high load
+		net_timeout = 10
 
 		#  LDAP_OPT_X_KEEPALIVE_IDLE
 		idle = 60
@@ -609,21 +611,24 @@ ldap {
 		#  connections during instantiation it will exit.
 		#  Set to 0 to allow the server to start without the
 		#  directory being available.
-		#  Increased from default for faster startup
-		start = 5
+		#  Optimized for 2k-3k concurrent users - increased from 5 to 10
+		start = 10
 
 		#  Minimum number of connections to keep open
 		#  Increased for faster response times - avoids connection creation delay
-		min = 5
+		#  Industry standard for high-volume deployments: 10-20
+		min = 10
 
 		#  Maximum number of connections
-		#  Increased for handling concurrent authentication requests
-		#  Set higher for deployments with many simultaneous WiFi users
-		max = 20
+		#  Increased for handling 2k-3k concurrent authentication requests
+		#  Each LDAP module instance supports up to 100 connections
+		#  With 4 domains, total system capacity: 400 LDAP connections
+		max = 100
 
 		#  Spare connections to be left idle
 		#  Keep more idle connections ready to reduce bind latency
-		spare = 10
+		#  Higher spare pool for burst traffic handling
+		spare = 20
 
 		#  Number of uses before the connection is closed
 		#
@@ -634,7 +639,8 @@ ldap {
 		#  The number of seconds to wait after the server tries
 		#  to open a connection, and fails.  During this time,
 		#  no new connections will be opened.
-		retry_delay = 30
+		#  Reduced from 30 to 10 for faster failover
+		retry_delay = 10
 
 		#  The lifetime (in seconds) of the connection
 		#  0 = infinite lifetime, connections stay open until idle_timeout
@@ -643,7 +649,8 @@ ldap {
 		#  Idle timeout (in seconds).  A connection which is
 		#  unused for this length of time will be closed.
 		#  Increased from 60 to 600 (10 minutes) to keep connections alive longer
-		idle_timeout = 600
+		#  Industry best practice for LDAP: 600-1800 seconds
+		idle_timeout = 900
 
 		#  NOTE: All configuration settings are enforced.  If a
 		#  connection is closed because of 'idle_timeout',

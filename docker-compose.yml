@@ -5,31 +5,54 @@ services:
       context: .
     container_name: freeradius-google-ldap
     env_file: .env
-    # Resource limits for 500-1000 concurrent sessions
+    # Resource limits for 2k-3k concurrent sessions
+    # Industry standard for high-concurrency RADIUS: 8-16 CPU cores, 8-16GB RAM
     deploy:
       resources:
         limits:
-          cpus: '4.0'
-          memory: 2G
+          cpus: '8.0'
+          memory: 8G
         reservations:
-          cpus: '2.0'
-          memory: 1G
+          cpus: '4.0'
+          memory: 4G
     environment:
+      # LDAP Configuration
       - LDAP_SERVER=${LDAP_SERVER}
       - LDAP_IDENTITY=${LDAP_IDENTITY}
       - LDAP_PASSWORD=${LDAP_PASSWORD}
       - LDAP_BASE_DN=${LDAP_BASE_DN}
       - LDAP_BIND_DN=${LDAP_BIND_DN}
+
+      # Multi-Domain Configuration (JSON format)
+      - DOMAIN_CONFIG=${DOMAIN_CONFIG}
+
+      # RADIUS Configuration
       - RADIUS_SECRET=${RADIUS_SECRET}
+
+      # Database Configuration
       - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT:-3306}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - RADIUS_MAX_CONNECTIONS=${RADIUS_MAX_CONNECTIONS}
-      - LDAP_MAX_CONNECTIONS=${LDAP_MAX_CONNECTIONS}
-      - LOG_LEVEL=${LOG_LEVEL}
-      - ENABLE_SQL_TRACE=${ENABLE_SQL_TRACE}
-      - ENABLE_LDAP_DEBUG=${ENABLE_LDAP_DEBUG}
+      - DB_MAX_CONNECTIONS=${DB_MAX_CONNECTIONS:-100}
+
+      # Performance Tuning for 2k-3k concurrent users
+      - RADIUS_MAX_CONNECTIONS=${RADIUS_MAX_CONNECTIONS:-500}
+      - LDAP_MAX_CONNECTIONS=${LDAP_MAX_CONNECTIONS:-100}
+
+      # Caching Configuration (Industry standard: 600-900 seconds)
+      - CACHE_TTL=${CACHE_TTL:-600}
+      - ENABLE_LDAP_CACHE=${ENABLE_LDAP_CACHE:-yes}
+      - ENABLE_AUTH_CACHE=${ENABLE_AUTH_CACHE:-yes}
+
+      # Logging and Debugging
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - ENABLE_SQL_TRACE=${ENABLE_SQL_TRACE:-no}
+      - ENABLE_LDAP_DEBUG=${ENABLE_LDAP_DEBUG:-no}
+      - LOG_AUTH_SUCCESS=${LOG_AUTH_SUCCESS:-yes}
+      - LOG_AUTH_FAILURE=${LOG_AUTH_FAILURE:-yes}
+      - LOG_PASSWORDS=${LOG_PASSWORDS:-no}
     volumes:
       - ./certs:/certs:ro
       - ./logs:/var/log/freeradius
@@ -53,15 +76,16 @@ services:
     image: mysql:8.0
     container_name: radius-mysql
     env_file: .env
-    # Resource limits for high-performance database
+    # Resource limits for high-performance database (2k-3k concurrent users)
+    # Industry standard: 4-8 CPU cores, 4-8GB RAM for RADIUS accounting database
     deploy:
       resources:
         limits:
-          cpus: '4.0'
-          memory: 3G
+          cpus: '8.0'
+          memory: 6G
         reservations:
-          cpus: '2.0'
-          memory: 2G
+          cpus: '4.0'
+          memory: 4G
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
@@ -74,23 +98,34 @@ services:
       - mysql_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d:ro
       - ./mysql-conf:/etc/mysql/conf.d:ro
-    # MySQL server configuration with timezone offset and performance tuning
+    # MySQL server configuration optimized for 2k-3k concurrent RADIUS sessions
+    # Industry standard tuning for high-volume authentication workloads
     command: >
-      --default-authentication-plugin=mysql_native_password 
+      --default-authentication-plugin=mysql_native_password
       --default-time-zone='${MYSQL_TIMEZONE_OFFSET}'
-      --max-connections=500
-      --innodb-buffer-pool-size=1G
-      --innodb-log-file-size=256M
+      --max-connections=1000
+      --innodb-buffer-pool-size=2G
+      --innodb-log-file-size=512M
       --innodb-flush-log-at-trx-commit=2
       --innodb-write-io-threads=16
       --innodb-read-io-threads=16
-      --innodb-io-capacity=4000
-      --innodb-buffer-pool-instances=8
+      --innodb-io-capacity=8000
+      --innodb-io-capacity-max=16000
+      --innodb-buffer-pool-instances=16
+      --innodb-flush-method=O_DIRECT
+      --innodb-log-buffer-size=128M
       --skip-name-resolve
       --skip-log-bin
       --performance-schema=OFF
-      --table-open-cache=4000
-      --thread-cache-size=100
+      --table-open-cache=8000
+      --table-open-cache-instances=16
+      --thread-cache-size=200
+      --sort-buffer-size=4M
+      --read-buffer-size=2M
+      --read-rnd-buffer-size=4M
+      --join-buffer-size=4M
+      --tmp-table-size=128M
+      --max-heap-table-size=128M
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]

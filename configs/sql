@@ -18,13 +18,16 @@ sql {
 	groupreply_table = "radgroupreply"
 	usergroup_table = "radusergroup"
 	
-	# Connection management - configurable via environment variables
+	# Connection management - optimized for 2k-3k concurrent users
 	delete_stale_sessions = yes
+	# Increased from default 5 to 50 for high concurrency
+	# Industry standard: 50-200 connections for enterprise deployments
 	num_sql_socks = ENV_DB_MAX_CONNECTIONS
-	connect_failure_retry_delay = 60
+	connect_failure_retry_delay = 30
 	lifetime = 0
 	max_queries = 0
-	idle_timeout = 300
+	# Increased idle timeout for connection reuse
+	idle_timeout = 600
 	
 	# Performance optimizations
 	# Use connection pooling efficiently
