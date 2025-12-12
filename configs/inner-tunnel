@@ -169,28 +169,17 @@ authorize {
 	#  For Google LDAP with PEAP-GTC: Uses LDAP bind authentication
 	#
 
-	# Extract domain from username for LDAP module selection
+	# Extract domain from username for VLAN assignment
 	if (!&request:Tmp-String-0 && (&User-Name =~ /@(.*)$/)) {
 		update request {
 			Tmp-String-0 := "%{1}"
 		}
 	}
 
-	#  Try cache first to avoid repeated LDAP queries (performance optimization)
-	ldap_cache
-
-	#  If cache miss, query LDAP using domain-specific module
-	if (notfound) {
-		# Call LDAP module instance for the user's domain
-		# Each domain has its own LDAP module with correct base DN
-		# This section is dynamically generated from DOMAIN_CONFIG environment variable
-		# --- DYNAMIC LDAP AUTHORIZE PLACEHOLDER ---
-
-		#  Cache the result for future requests
-		if (ok || updated) {
-			ldap_cache
-		}
-	}
+	#  NOTE: LDAP module call removed from authorize section
+	#  FreeRADIUS escapes special characters in dynamic base_dn values,
+	#  breaking multi-domain authentication. We use external script instead.
+	#  Authentication is handled by ldap-auth.sh in Auth-Type LDAP section.
 
 	#
 	#  For Google LDAP: Hybrid authentication support
@@ -246,144 +235,14 @@ authorize {
 	}
 
 	# --- BEGIN DYNAMIC DOMAIN CONFIG FOR INNER TUNNEL ---
-	if (&request:Tmp-String-0) {
-		# krea.ac.in with key ".mba" = Student-MBA, VLAN 216
-		if ((&request:Tmp-String-0 == "krea.ac.in") && (&User-Name =~ /.mba@/)) {
-			update control {
-				Tmp-String-1 := "Student-MBA"
-			}
-			update reply {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 216
-			}
-			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
-			update session-state {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 216
-				Tmp-String-1 := "Student-MBA"
-			}
-		}
-		# krea.ac.in with key ".sias" = Student-SIAS, VLAN 224
-		elsif ((&request:Tmp-String-0 == "krea.ac.in") && (&User-Name =~ /.sias@/)) {
-			update control {
-				Tmp-String-1 := "Student-SIAS"
-			}
-			update reply {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 224
-			}
-			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
-			update session-state {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 224
-				Tmp-String-1 := "Student-SIAS"
-			}
-		}
-		# krea.ac.in with key ".phd" = Student-PhD, VLAN 232
-		elsif ((&request:Tmp-String-0 == "krea.ac.in") && (&User-Name =~ /.phd@/)) {
-			update control {
-				Tmp-String-1 := "Student-PhD"
-			}
-			update reply {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 232
-			}
-			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
-			update session-state {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 232
-				Tmp-String-1 := "Student-PhD"
-			}
-		}
-		# krea.ac.in with key ".bba" = Student-BBA, VLAN 240
-		elsif ((&request:Tmp-String-0 == "krea.ac.in") && (&User-Name =~ /.bba@/)) {
-			update control {
-				Tmp-String-1 := "Student-BBA"
-			}
-			update reply {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 240
-			}
-			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
-			update session-state {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 240
-				Tmp-String-1 := "Student-BBA"
-			}
-		}
-		# krea.ac.in (default/others) = Student-Others, VLAN 144
-		elsif (&request:Tmp-String-0 == "krea.ac.in") {
-			update control {
-				Tmp-String-1 := "Student-Others"
-			}
-			update reply {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 144
-			}
-			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
-			update session-state {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 144
-				Tmp-String-1 := "Student-Others"
-			}
-		}
-		# krea.edu.in (default/others) = Staff-Krea, VLAN 248
-		elsif (&request:Tmp-String-0 == "krea.edu.in") {
-			update control {
-				Tmp-String-1 := "Staff-Krea"
-			}
-			update reply {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 248
-			}
-			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
-			update session-state {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 248
-				Tmp-String-1 := "Staff-Krea"
-			}
-		}
-		# ifmr.ac.in (default/others) = IFMR, VLAN 250
-		elsif (&request:Tmp-String-0 == "ifmr.ac.in") {
-			update control {
-				Tmp-String-1 := "IFMR"
-			}
-			update reply {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 250
-			}
-			# Copy VLAN and user type to session-state for EAP-TTLS/PEAP inner tunnel logging
-			update session-state {
-				Tunnel-Type := VLAN
-				Tunnel-Medium-Type := IEEE-802
-				Tunnel-Private-Group-Id := 250
-				Tmp-String-1 := "IFMR"
-			}
-		}
-		else {
-			# Domain not in configuration, reject
-			update control {
-				Auth-Type := Reject
-				Error-Type := "invalid_domain"
-			}
-			update reply {
-				Reply-Message := "Domain not supported"
-			}
-		}
-	}
+	# This section is DYNAMICALLY GENERATED by init.sh from DOMAIN_CONFIG environment variable
+	# DO NOT MANUALLY EDIT - All hardcoded VLANs have been removed
+	# The init.sh script will populate this section at container startup with:
+	#   - Domain-based VLAN assignments from DOMAIN_CONFIG
+	#   - User type classifications
+	#   - Key-based matching (e.g., .mba@, .sias@, etc.)
+	# Example DOMAIN_CONFIG format:
+	# [{"domain":"example.com","key":".mba","Type":"Student-MBA","VLAN":"216"}]
 	# --- END DYNAMIC DOMAIN CONFIG FOR INNER TUNNEL ---
 
 	#
@@ -438,43 +297,41 @@ authenticate {
 		# Example: $ becomes =3D24, so SenthilNasa005$$$$$ becomes SenthilNasa005=3D24=3D24=3D24=3D24=3D24
 		#
 		# Google LDAP does NOT expose userPassword, so we use LDAP bind authentication
-		# Steps:
-		# 1. Identify the password attribute GTC set (User-Password or Cleartext-Password)
-		# 2. Decode it if necessary (remove URL encoding)
-		# 3. Perform LDAP bind to authenticate
+		# Domain-specific LDAP modules are dynamically generated from DOMAIN_CONFIG
 
 		# Priority 1: Check User-Password first
 		if (&User-Password) {
-			# Debug: Log the password value to see what we're working with
-			update control {
-				Tmp-String-9 := "%{User-Password}"
-			}
-
 			# Decode password if it contains = character (URL-encoded)
 			# Mac WiFi clients send passwords URL-encoded in GTC
 			if (User-Password =~ /=/) {
-				# Password is encoded, decode it using the decode script
-				update request {
-					User-Password := "%{exec:/bin/bash /etc/freeradius/decode-password.sh %{User-Password}}"
-				}
-			}
-			else {
-				# Password doesn't contain =, might already be decoded or not encoded
-				# Force decode anyway to handle edge cases (backslash removal, etc.)
 				update request {
 					User-Password := "%{exec:/bin/bash /etc/freeradius/decode-password.sh %{User-Password}}"
 				}
 			}
 
-			# Use LDAP bind to authenticate (Google LDAP doesn't expose passwords)
-			# This will bind to LDAP as the user to verify the password
-			ldap
+			# Extract domain if not already set
+			if (!&request:Tmp-String-0 && (&User-Name =~ /@(.*)$/)) {
+				update request {
+					Tmp-String-0 := "%{1}"
+				}
+			}
+
+			# --- BEGIN DYNAMIC AUTH-TYPE PAP LDAP ROUTING ---
+			# This section is dynamically generated by init.sh from DOMAIN_CONFIG
+			# Use ldap-auth exec module for multi-domain authentication
+			ldap-auth
+			# --- END DYNAMIC AUTH-TYPE PAP LDAP ROUTING ---
+			
+			if (ok) {
+				update reply {
+					Reply-Message := "PAP-LDAP Authentication Successful"
+				}
+			}
 		}
 		# Priority 2: Check Cleartext-Password as fallback
 		elsif (&Cleartext-Password) {
 			# Cleartext-Password might be encoded
 			if (Cleartext-Password =~ /=/) {
-				# Decode it
 				update request {
 					Cleartext-Password := "%{exec:/bin/bash /etc/freeradius/decode-password.sh %{Cleartext-Password}}"
 				}
@@ -485,12 +342,24 @@ authenticate {
 				User-Password := "%{Cleartext-Password}"
 			}
 
-			# Use LDAP bind to authenticate
-			ldap
+			# Extract domain if not already set
+			if (!&request:Tmp-String-0 && (&User-Name =~ /@(.*)$/)) {
+				update request {
+					Tmp-String-0 := "%{1}"
+				}
+			}
+
+			# Use ldap-auth exec module for multi-domain authentication
+			ldap-auth
+			
+			if (ok) {
+				update reply {
+					Reply-Message := "PAP-LDAP Authentication Successful"
+				}
+			}
 		}
 		else {
 			# No password found - this shouldn't happen in GTC flow
-			# Return fail to trigger error handling
 			reject
 		}
 	}
@@ -543,10 +412,15 @@ authenticate {
 			}
 		}
 
-		# Perform LDAP bind authentication using domain-specific module
-		# This will bind to LDAP using the user's DN and password
-		# This section is dynamically generated from DOMAIN_CONFIG environment variable
-		# --- DYNAMIC LDAP AUTH PLACEHOLDER ---
+		# Use ldap-auth exec module - handles multi-domain correctly
+		# Each domain is searched in its own base_dn tree
+		ldap-auth
+		
+		if (ok) {
+			update reply {
+				Reply-Message := "LDAP Authentication Successful"
+			}
+		}
 	}
 
 	#

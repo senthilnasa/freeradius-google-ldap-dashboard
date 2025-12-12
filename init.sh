@@ -36,110 +36,51 @@ sed -i "s|GOOGLE_LDAPTLS_CERT|$GOOGLE_LDAPTLS_CERT|g" /etc/freeradius/mods-avail
 sed -i "s|GOOGLE_LDAPTLS_KEY|$GOOGLE_LDAPTLS_KEY|g" /etc/freeradius/mods-available/ldap
 
 # =================================================================================
-# Create LDAP module instances for each domain
+# Configure Single LDAP Connection with Dynamic DN Query Builder
 # =================================================================================
-# Google LDAP organizes users in separate directory trees per domain
-# We need separate LDAP module instances with different base DNs for each domain
-echo "Creating LDAP module instances for multi-domain support..."
+# OPTIMIZATION: Instead of creating multiple LDAP module instances (which causes
+# slow startup and connection pool exhaustion), we use ONE LDAP connection with
+# dynamic base DN built from the user's domain extracted from username
+echo "Configuring single LDAP connection with dynamic DN query builder..."
 
-# Function to convert domain to base DN
-domain_to_base_dn() {
-    local domain="$1"
-    # alumni.krea.edu.in -> dc=alumni,dc=krea,dc=edu,dc=in
-    # krea.edu.in -> dc=krea,dc=edu,dc=in
-    # krea.ac.in -> dc=krea,dc=ac,dc=in
-    # ifmr.ac.in -> dc=ifmr,dc=ac,dc=in
-    echo "$domain" | sed 's/\./,dc=/g' | sed 's/^/dc=/'
-}
+# The base DN will be dynamically calculated in the LDAP module using xlat
+# This allows searching across all domains with a single connection pool
+echo "LDAP will use mail=%{User-Name} filter with scope=sub to search all domains"
+echo "Single connection pool serves all domains - FAST startup and efficient connections"
 
-# Parse DOMAIN_CONFIG and create an LDAP instance for each unique domain
-if [ -n "$DOMAIN_CONFIG" ]; then
-    # Extract unique domains from DOMAIN_CONFIG
-    domains=$(echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*"' | sed 's/"domain":"\([^"]*\)"/\1/' | sort -u)
+# =================================================================================
+# Configure LDAP Connection Pool from Environment Variables
+# =================================================================================
+# LDAP_MAX_CONNECTIONS controls the maximum LDAP connections (default: 100)
+# Pool is automatically scaled: start=10%, min=10%, max=100%, spare=20%
+LDAP_MAX=${LDAP_MAX_CONNECTIONS:-100}
+LDAP_START=$((LDAP_MAX / 10))  # 10% of max
+LDAP_MIN=$((LDAP_MAX / 10))    # 10% of max
+LDAP_SPARE=$((LDAP_MAX / 5))   # 20% of max
 
-    echo "Found domains: $domains"
+echo "Configuring LDAP pool: start=$LDAP_START, min=$LDAP_MIN, max=$LDAP_MAX, spare=$LDAP_SPARE"
 
-    for domain in $domains; do
-        # Convert domain name to a safe module name (replace dots with underscores)
-        module_name="ldap_$(echo "$domain" | sed 's/\./_/g')"
-        base_dn=$(domain_to_base_dn "$domain")
+sed -i "s|ENV_LDAP_POOL_START|${LDAP_START}|g" /etc/freeradius/mods-available/ldap
+sed -i "s|ENV_LDAP_POOL_MIN|${LDAP_MIN}|g" /etc/freeradius/mods-available/ldap
+sed -i "s|ENV_LDAP_POOL_MAX|${LDAP_MAX}|g" /etc/freeradius/mods-available/ldap
+sed -i "s|ENV_LDAP_POOL_SPARE|${LDAP_SPARE}|g" /etc/freeradius/mods-available/ldap
 
-        echo "Creating LDAP module instance: $module_name for domain $domain with base DN: $base_dn"
+# =================================================================================
+# Configure RADIUS Thread Pool from Environment Variables
+# =================================================================================
+# RADIUS_MAX_CONNECTIONS controls maximum RADIUS worker threads (default: 500)
+# Pool is automatically scaled: start=10%, max=100%, min_spare=5%, max_spare=20%
+RADIUS_MAX=${RADIUS_MAX_CONNECTIONS:-500}
+RADIUS_START=$((RADIUS_MAX / 10))        # 10% of max
+RADIUS_MIN_SPARE=$((RADIUS_MAX / 20))    # 5% of max
+RADIUS_MAX_SPARE=$((RADIUS_MAX / 5))     # 20% of max
 
-        # Copy the main LDAP module config and modify the base_dn
-        cp /etc/freeradius/mods-available/ldap "/etc/freeradius/mods-available/$module_name"
+echo "Configuring RADIUS thread pool: start=$RADIUS_START, max=$RADIUS_MAX, min_spare=$RADIUS_MIN_SPARE, max_spare=$RADIUS_MAX_SPARE"
 
-        # IMPORTANT: Keep the module type as "ldap" (don't rename it)
-        # FreeRADIUS looks for rlm_ldap.so, not rlm_ldap_<instance>.so
-        # The instance name comes from the config filename and the section header
-        # Change: ldap { ... } to: ldap module_name { ... }
-        sed -i "s/^ldap {/ldap ${module_name} {/" "/etc/freeradius/mods-available/$module_name"
-
-        # Update the base_dn for this domain
-        sed -i "s|base_dn = 'dc=krea,dc=edu,dc=in'|base_dn = '$base_dn'|" "/etc/freeradius/mods-available/$module_name"
-        sed -i "s|base_dn = 'dc=BASE_DOMAIN,dc=DOMAIN_EXTENSION'|base_dn = '$base_dn'|" "/etc/freeradius/mods-available/$module_name"
-
-        # Enable the module
-        ln -sf "/etc/freeradius/mods-available/$module_name" "/etc/freeradius/mods-enabled/$module_name"
-
-        echo "Created and enabled LDAP module: $module_name"
-    done
-    
-    # =================================================================================
-    # Generate dynamic LDAP calling code for configs
-    # =================================================================================
-    echo "Generating dynamic LDAP calling configuration..."
-    
-    # Generate the dynamic LDAP module selection code
-    first_domain=true
-    
-    # Create the ldap_call_code.conf file directly with proper formatting
-    > /tmp/ldap_call_code.conf
-    
-    for domain in $domains; do
-        module_name="ldap_$(echo "$domain" | sed 's/\./_/g')"
-        
-        if [ "$first_domain" = true ]; then
-            echo "		if (&request:Tmp-String-0 == \"$domain\") {" >> /tmp/ldap_call_code.conf
-            echo "			$module_name" >> /tmp/ldap_call_code.conf
-            echo "		}" >> /tmp/ldap_call_code.conf
-            first_domain=false
-        else
-            echo "		elsif (&request:Tmp-String-0 == \"$domain\") {" >> /tmp/ldap_call_code.conf
-            echo "			$module_name" >> /tmp/ldap_call_code.conf
-            echo "		}" >> /tmp/ldap_call_code.conf
-        fi
-    done
-    
-    # Add fallback to default ldap module
-    echo "		else {" >> /tmp/ldap_call_code.conf
-    echo "			# Fallback to default ldap module" >> /tmp/ldap_call_code.conf
-    echo "			ldap" >> /tmp/ldap_call_code.conf
-    echo "		}" >> /tmp/ldap_call_code.conf
-    
-    echo "Generated LDAP calling code for $(echo "$domains" | wc -w) domains"
-    
-    # Replace placeholder in default config (Auth-Type LDAP section)
-    if grep -q "# --- DYNAMIC LDAP CALLS PLACEHOLDER ---" /etc/freeradius/sites-available/default; then
-        echo "Replacing LDAP calls placeholder in default config..."
-        sed -i "/# --- DYNAMIC LDAP CALLS PLACEHOLDER ---/r /tmp/ldap_call_code.conf" /etc/freeradius/sites-available/default
-        sed -i "/# --- DYNAMIC LDAP CALLS PLACEHOLDER ---/d" /etc/freeradius/sites-available/default
-    fi
-    
-    # Replace placeholder in inner-tunnel config (authorize section)
-    if grep -q "# --- DYNAMIC LDAP AUTHORIZE PLACEHOLDER ---" /etc/freeradius/sites-available/inner-tunnel; then
-        echo "Replacing LDAP authorize placeholder in inner-tunnel config..."
-        sed -i "/# --- DYNAMIC LDAP AUTHORIZE PLACEHOLDER ---/r /tmp/ldap_call_code.conf" /etc/freeradius/sites-available/inner-tunnel
-        sed -i "/# --- DYNAMIC LDAP AUTHORIZE PLACEHOLDER ---/d" /etc/freeradius/sites-available/inner-tunnel
-    fi
-    
-    # Replace placeholder in inner-tunnel config (authenticate section)
-    if grep -q "# --- DYNAMIC LDAP AUTH PLACEHOLDER ---" /etc/freeradius/sites-available/inner-tunnel; then
-        echo "Replacing LDAP auth placeholder in inner-tunnel config..."
-        sed -i "/# --- DYNAMIC LDAP AUTH PLACEHOLDER ---/r /tmp/ldap_call_code.conf" /etc/freeradius/sites-available/inner-tunnel
-        sed -i "/# --- DYNAMIC LDAP AUTH PLACEHOLDER ---/d" /etc/freeradius/sites-available/inner-tunnel
-    fi
-fi
+sed -i "s|ENV_RADIUS_START_SERVERS|${RADIUS_START}|g" /etc/freeradius/radiusd.conf
+sed -i "s|ENV_RADIUS_MAX_SERVERS|${RADIUS_MAX}|g" /etc/freeradius/radiusd.conf
+sed -i "s|ENV_RADIUS_MIN_SPARE_SERVERS|${RADIUS_MIN_SPARE}|g" /etc/freeradius/radiusd.conf
+sed -i "s|ENV_RADIUS_MAX_SPARE_SERVERS|${RADIUS_MAX_SPARE}|g" /etc/freeradius/radiusd.conf
 
 # Update SQL configuration with database environment variables
 sed -i "s|\${ENV_DB_HOST}|${DB_HOST:-mysql}|g" /etc/freeradius/mods-available/sql
@@ -276,6 +217,80 @@ EOFCONFIG
         # Move the generated config to FreeRADIUS config directory
         mv /tmp/domain_config.conf /etc/freeradius/mods-config/files/domain_mappings.conf
         
+        # =================================================================================
+        # Single LDAP Module Configuration
+        # =================================================================================
+        # Using single LDAP module with static base_dn from .env
+        # The mail filter + scope=sub allows finding users across all Google Workspace domains
+        # No need for domain-specific LDAP instances!
+        echo "Using single LDAP module with base_dn from environment..."
+        echo "Domains in DOMAIN_CONFIG will be searched via mail filter with scope=sub"
+        
+        # Generate simple LDAP routing (just call ldap module)
+        cat > /etc/freeradius/mods-config/files/ldap_domain_routing.conf << 'LDAP_ROUTE'
+		# Single LDAP module for all domains
+		# base_dn is static from .env, scope=sub searches all domains
+		ldap
+LDAP_ROUTE
+        
+        echo "LDAP routing: single module for all domains"
+
+        # =================================================================================
+        # Generate domain to base_dn mapping for ldap-auth.sh script
+        # =================================================================================
+        # This script is used for external LDAP authentication which bypasses
+        # FreeRADIUS's DN escaping issue
+        echo "Generating domain to base_dn mapping for ldap-auth.sh..."
+        
+        # Extract unique domains from DOMAIN_CONFIG
+        UNIQUE_DOMAINS=$(echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*"' | sed 's/"domain":"\([^"]*\)"/\1/g' | sort -u)
+        
+        # Generate case statement for ldap-auth.sh
+        CASE_ENTRIES=""
+        for domain in $UNIQUE_DOMAINS; do
+            # Convert domain to base_dn: krea.ac.in -> dc=krea,dc=ac,dc=in
+            BASE_DN=$(echo "$domain" | sed 's/\./,dc=/g; s/^/dc=/')
+            CASE_ENTRIES="${CASE_ENTRIES}    \"$domain\")
+        BASE_DN=\"$BASE_DN\"
+        ;;
+"
+        done
+        
+        # Update ldap-auth.sh with dynamic domain mapping
+        if [ -f /etc/freeradius/ldap-auth.sh ]; then
+            # Create updated ldap-auth.sh with dynamic domain mapping
+            awk -v case_entries="$CASE_ENTRIES" '
+            BEGIN { skip=0 }
+            /# --- BEGIN DOMAIN TO BASE_DN MAPPING ---/ {
+                print
+                print "# This section is dynamically generated by init.sh from DOMAIN_CONFIG"
+                print "# Map domain to LDAP base DN"
+                print "case \"$DOMAIN\" in"
+                printf "%s", case_entries
+                print "    *)"
+                print "        # Domain not configured"
+                print "        log_debug \"Unknown domain: $DOMAIN - not in DOMAIN_CONFIG\""
+                print "        exit 1"
+                print "        ;;"
+                print "esac"
+                skip=1
+                next
+            }
+            /# --- END DOMAIN TO BASE_DN MAPPING ---/ {
+                skip=0
+                print
+                next
+            }
+            !skip { print }
+            ' /etc/freeradius/ldap-auth.sh > /tmp/ldap-auth.sh.new
+            
+            if [ -s /tmp/ldap-auth.sh.new ]; then
+                mv /tmp/ldap-auth.sh.new /etc/freeradius/ldap-auth.sh
+                chmod +x /etc/freeradius/ldap-auth.sh
+                echo "Generated domain to base_dn mapping for domains: $UNIQUE_DOMAINS"
+            fi
+        fi
+
         # Generate dynamic unlang configuration for VLAN assignment using bash
         # Support both key-based matching (user.mba@domain) and domain-only matching
         > /tmp/dynamic_vlan.conf  # Clear file
@@ -375,67 +390,44 @@ UNLANG
 
         if [ $? -eq 0 ]; then
             # Insert dynamic VLAN configuration into default site config
-            # This replaces the hardcoded domain checks with dynamic ones
-            
-            # First, generate the LDAP module calls dynamically from domains
-            domains=$(echo "$DOMAIN_CONFIG" | grep -o '"domain":"[^"]*"' | sed 's/"domain":"\([^"]*\)"/\1/' | sort -u)
-            ldap_calls=""
-            first_ldap=true
-            for domain in $domains; do
-                module_name="ldap_$(echo "$domain" | sed 's/\./_/g')"
-                if [ "$first_ldap" = true ]; then
-                    ldap_calls="if (&request:Tmp-String-0 == \"$domain\") {
-			$module_name
-		}"
-                    first_ldap=false
-                else
-                    ldap_calls="$ldap_calls
-		elsif (&request:Tmp-String-0 == \"$domain\") {
-			$module_name
-		}"
-                fi
-            done
-            ldap_calls="$ldap_calls
-		else {
-			# Fallback to default ldap module
-			ldap
-		}"
-            
+            # Using domain-specific LDAP modules (dynamically generated from DOMAIN_CONFIG)
+
+            # Read the LDAP domain routing configuration
+            LDAP_ROUTING=""
+            if [ -f /etc/freeradius/mods-config/files/ldap_domain_routing.conf ]; then
+                LDAP_ROUTING=$(cat /etc/freeradius/mods-config/files/ldap_domain_routing.conf)
+            fi
+
             cat > /tmp/authorize_section.conf << EOFCONFIG
 
 	# Multi-domain support with dynamic VLAN assignments
 	# Configuration loaded from DOMAIN_CONFIG environment variable
-	# All domains use same LDAP connection (same Google Workspace)
+	# Domain-specific LDAP modules generated at container startup
 
 	if (&request:Tmp-String-0) {
-		# Query LDAP to verify user exists and password is valid
-		# Google LDAP organizes users in separate directory trees by domain
-		# We call the domain-specific LDAP module instance based on Tmp-String-0 (domain)
+		# Use domain-specific LDAP module for user lookup
+		# Modules are dynamically generated from DOMAIN_CONFIG
+$LDAP_ROUTING
 
-		# Call LDAP module instance for the user's domain (dynamically generated)
-		$ldap_calls
-
-		# If LDAP search successful, user exists in LDAP
+		# Set Auth-Type to LDAP if user was found
 		if (ok || updated) {
-			# User exists in LDAP - set Auth-Type to LDAP for bind authentication
-			# This will use LDAP bind to verify the password (Google LDAP doesn't expose passwords)
 			update control {
 				Auth-Type := ldap
 			}
+		}
 
-			# Dynamic VLAN assignment based on domain
+		# Dynamic VLAN assignment based on domain
 EOFCONFIG
             cat /tmp/dynamic_vlan.conf >> /tmp/authorize_section.conf
             cat >> /tmp/authorize_section.conf << 'EOF'
-			else {
-				# Domain not in configuration, reject
-				update control {
-					Auth-Type := Reject
-					Error-Type := "invalid_domain"
-				}
-				update reply {
-					Reply-Message := "Domain not supported"
-				}
+		else {
+			# Domain not in configuration, reject
+			update control {
+				Auth-Type := Reject
+				Error-Type := "invalid_domain"
+			}
+			update reply {
+				Reply-Message := "Domain not supported"
 			}
 		}
 	}
@@ -493,6 +485,19 @@ EOF
             /# --- BEGIN DYNAMIC DOMAIN CONFIG FOR INNER TUNNEL ---/ {
                 print
                 print "\tif (&request:Tmp-String-0) {"
+                print "\t\t# Use single LDAP module for all domains"
+                print "\t\t# base_dn is static, scope=sub searches all domains via mail filter"
+                print "\t\tldap"
+                print ""
+                print "\t\t# Set Auth-Type to LDAP only if we have User-Password (non-EAP or PAP inside EAP)"
+                print "\t\t# If EAP is handling auth (no User-Password yet), let EAP set Auth-Type"
+                print "\t\tif ((ok || updated) && &User-Password) {"
+                print "\t\t\tupdate control {"
+                print "\t\t\t\tAuth-Type := ldap"
+                print "\t\t\t}"
+                print "\t\t}"
+                print ""
+                print "\t\t# Dynamic VLAN assignment based on domain (from DOMAIN_CONFIG)"
                 skip=1
                 next
             }

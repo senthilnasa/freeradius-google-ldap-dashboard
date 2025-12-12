@@ -27,3 +27,21 @@ exec {
         shell_escape = no
         timeout = 10
 }
+
+#
+#  External LDAP authentication for Google Workspace
+#  This bypasses FreeRADIUS LDAP module's DN escaping issue
+#  by doing LDAP search + bind directly in a shell script
+#
+#  Usage in authenticate section:
+#    Auth-Type ldap-auth {
+#        ldap-auth
+#    }
+#
+exec ldap-auth {
+        wait = yes
+        program = "/bin/sh /etc/freeradius/ldap-auth.sh '%{User-Name}' '%{User-Password}'"
+        input_pairs = request
+        shell_escape = no
+        timeout = 15
+}

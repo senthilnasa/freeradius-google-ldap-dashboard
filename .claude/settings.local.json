@@ -22,7 +22,12 @@
       "Bash(php -r:*)",
       "Bash(python3:*)",
       "Bash(docker cp:*)",
-      "Bash(docker builder prune -f)"
+      "Bash(docker builder prune -f)",
+      "Bash(docker system prune:*)",
+      "Bash(docker start:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(tasklist:*)"
     ],
     "deny": [],
     "ask": []

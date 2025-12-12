@@ -5,6 +5,11 @@
 # Used to categorize authentication failures for reporting
 ATTRIBUTE	Error-Type	3000	string
 
+# LDAP-Base-DN attribute for dynamic LDAP base DN construction
+# Used to set the correct DN based on user's email domain
+# Example: user@krea.ac.in → dc=krea,dc=ac,dc=in
+ATTRIBUTE	LDAP-Base-DN	3001	string
+
 # =================================================================================
 # Aruba Vendor-Specific Attributes (VSA)
 # =================================================================================

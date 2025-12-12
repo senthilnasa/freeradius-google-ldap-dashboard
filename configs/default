@@ -297,11 +297,15 @@ authorize {
 	#  This persists through inner-tunnel processing for EAP-TTLS/PEAP
 	#  Supports: Standard RADIUS, Aruba, Cisco, Ruckus, Mist, UniFi, MikroTik
 	#
-	update session-state {
-		#  Build JSON object with ALL request attributes
-		#  Format: {"key":"value","key2":"value2",...}
-		Tmp-String-10 := "{\"User-Name\":\"%{User-Name}\",\"NAS-IP-Address\":\"%{NAS-IP-Address}\",\"NAS-Identifier\":\"%{NAS-Identifier}\",\"NAS-Port\":\"%{NAS-Port}\",\"NAS-Port-Type\":\"%{NAS-Port-Type}\",\"Calling-Station-Id\":\"%{Calling-Station-Id}\",\"Called-Station-Id\":\"%{Called-Station-Id}\",\"Acct-Session-Id\":\"%{Acct-Session-Id}\",\"Framed-IP-Address\":\"%{Framed-IP-Address}\",\"Framed-MTU\":\"%{Framed-MTU}\",\"Class\":\"%{Class}\",\"Filter-Id\":\"%{Filter-Id}\",\"Tunnel-Type\":\"%{Tunnel-Type}\",\"Tunnel-Medium-Type\":\"%{Tunnel-Medium-Type}\",\"Tunnel-Private-Group-Id\":\"%{Tunnel-Private-Group-Id}\",\"Aruba-Essid-Name\":\"%{Aruba-Essid-Name}\",\"Aruba-Essid-Id\":\"%{Aruba-Essid-Id}\",\"Aruba-Location-Id\":\"%{Aruba-Location-Id}\",\"Aruba-AP-Name\":\"%{Aruba-AP-Name}\",\"Aruba-AP-Serial\":\"%{Aruba-AP-Serial}\",\"Cisco-AVPair\":\"%{Cisco-AVPair}\",\"Ruckus-AP-Name\":\"%{Ruckus-AP-Name}\",\"Ruckus-SSID\":\"%{Ruckus-SSID}\",\"Mist-AP-Name\":\"%{Mist-AP-Name}\",\"UniFi-SSID\":\"%{UniFi-SSID}\",\"MikroTik-Group\":\"%{MikroTik-Group}\"}"
-	}
+	#  DISABLED: Vendor-specific attributes cause startup validation errors
+	#  These attributes (Aruba-*, Cisco-*, etc.) may not exist in all deployments
+	#  The request_log column in SQL is set to NULL instead
+	#
+	# update session-state {
+	#	#  Build JSON object with ALL request attributes
+	#	#  Format: {"key":"value","key2":"value2",...}
+	#	Tmp-String-10 := "{\"User-Name\":\"%{User-Name}\",\"NAS-IP-Address\":\"%{NAS-IP-Address}\",\"NAS-Identifier\":\"%{NAS-Identifier}\",\"NAS-Port\":\"%{NAS-Port}\",\"NAS-Port-Type\":\"%{NAS-Port-Type}\",\"Calling-Station-Id\":\"%{Calling-Station-Id}\",\"Called-Station-Id\":\"%{Called-Station-Id}\",\"Acct-Session-Id\":\"%{Acct-Session-Id}\",\"Framed-IP-Address\":\"%{Framed-IP-Address}\",\"Framed-MTU\":\"%{Framed-MTU}\",\"Class\":\"%{Class}\",\"Filter-Id\":\"%{Filter-Id}\",\"Tunnel-Type\":\"%{Tunnel-Type}\",\"Tunnel-Medium-Type\":\"%{Tunnel-Medium-Type}\",\"Tunnel-Private-Group-Id\":\"%{Tunnel-Private-Group-Id}\",\"Aruba-Essid-Name\":\"%{Aruba-Essid-Name}\",\"Aruba-Essid-Id\":\"%{Aruba-Essid-Id}\",\"Aruba-Location-Id\":\"%{Aruba-Location-Id}\",\"Aruba-AP-Name\":\"%{Aruba-AP-Name}\",\"Aruba-AP-Serial\":\"%{Aruba-AP-Serial}\",\"Cisco-AVPair\":\"%{Cisco-AVPair}\",\"Ruckus-AP-Name\":\"%{Ruckus-AP-Name}\",\"Ruckus-SSID\":\"%{Ruckus-SSID}\",\"Mist-AP-Name\":\"%{Mist-AP-Name}\",\"UniFi-SSID\":\"%{UniFi-SSID}\",\"MikroTik-Group\":\"%{MikroTik-Group}\"}"
+	# }
 
 
 	#
@@ -431,9 +435,10 @@ authorize {
 #	smbpasswd
 
 	#
-	#  The ldap module reads passwords from LDAP database.
-	#  Support multiple domains from same Google Workspace with VLAN assignments
-	
+	#  Multi-domain Google LDAP support
+	#  NOTE: We skip LDAP module in authorize because FreeRADIUS escapes base_dn
+	#  Authentication is handled by external script in Auth-Type LDAP section
+
 	# Extract domain from username for role assignment and VLAN tagging
 	if (&User-Name =~ /@(.*)$/) {
 		update request {
@@ -451,17 +456,11 @@ authorize {
 	# Example: [{"domain":"staff.yourdomain.com","Type":"Staff","VLAN":"10"},{"domain":"students.yourdomain.com","Type":"Student","VLAN":"20"}]
 
 	if (&request:Tmp-String-0) {
-		# Query LDAP to verify user exists and get user attributes
-		# Google LDAP does not expose passwords, so we'll use LDAP bind for auth
-		ldap
-
-		# If LDAP search successful, user exists
-		if (ok || updated) {
-			# Set Auth-Type to LDAP for bind-based authentication
-			# This will authenticate against LDAP in the authenticate section
-			update control {
-				Auth-Type := ldap
-			}
+		# Skip LDAP module call here - it causes DN escaping issues with multi-domain
+		# Just set Auth-Type to LDAP and let the external script handle authentication
+		# VLAN assignments are handled in the dynamic domain config block below
+		update control {
+			Auth-Type := ldap
 		}
 		# Domain-specific VLAN assignments will be inserted here by init.sh
 		}
@@ -583,24 +582,22 @@ authenticate {
 	#  the ldap database", which means that EAP won't work,
 	#  as it does not supply a plain-text password.
 	#
-	#  We do NOT recommend using this.  LDAP servers are databases.
-	#  They are NOT authentication servers.  FreeRADIUS is an
-	#  authentication server, and knows what to do with authentication.
-	#  LDAP servers do not.
+	#  Use external LDAP authentication script
+	#  This bypasses FreeRADIUS LDAP module's DN escaping issue
+	#  The script does: 1) Search user DN in correct domain tree
+	#                   2) Bind with user's password to verify
 	#
 	Auth-Type LDAP {
-		#  Domain-based LDAP authentication
-		#  Call the appropriate LDAP module based on domain extracted from User-Name
-		#  This section is dynamically generated from DOMAIN_CONFIG environment variable
-		# --- DYNAMIC LDAP CALLS PLACEHOLDER ---
+		#  Use ldap-auth exec module - handles multi-domain correctly
+		#  Each domain is searched in its own base_dn tree
+		ldap-auth
+		
+		if (ok) {
+			update reply {
+				Reply-Message := "LDAP Authentication Successful"
+			}
+		}
 	}
-
-	#
-	#  Authentication for second domain (when configured)
-	#
-	# Auth-Type ldap_domain2 {
-	#	ldap_domain2
-	# }
 
 	#
 	#  Allow EAP authentication.
