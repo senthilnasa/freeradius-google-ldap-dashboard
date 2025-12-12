@@ -256,47 +256,73 @@ document.addEventListener('DOMContentLoaded', function() {
                 var requestLog = JSON.parse(requestLogJson);
                 var detailsHtml = '';
 
-                // Define friendly labels for each field
-                var fieldLabels = {
-                    'nas_ip': 'NAS IP Address',
-                    'nas_port': 'NAS Port',
-                    'nas_identifier': 'NAS Identifier',
-                    'nas_port_type': 'NAS Port Type',
-                    'calling_station_id': 'Client MAC Address',
-                    'called_station_id': 'AP MAC Address',
-                    'service_type': 'Service Type',
-                    'framed_mtu': 'Framed MTU',
-                    'aruba_essid': 'WiFi SSID',
-                    'aruba_location': 'AP Location',
-                    'aruba_ap_group': 'AP Group',
-                    'aruba_device_type': 'Device Type',
-                    'eap_type': 'EAP Type',
-                    'packet_src_ip': 'Source IP',
-                    'packet_src_port': 'Source Port'
-                };
-
-                // Build table rows for Parsed View
-                for (var key in requestLog) {
-                    if (requestLog.hasOwnProperty(key) && requestLog[key]) {
-                        var label = fieldLabels[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                        var value = requestLog[key];
-
-                        // Format MAC addresses nicely
-                        if (key === 'calling_station_id' || key === 'called_station_id') {
-                            value = '<code>' + value + '</code>';
+                // Parse the pipe-delimited request log format
+                // Format: "key1:value1|key2:value2|..."
+                var detailsHtml = '';
+                
+                try {
+                    // First try to parse as JSON (for backward compatibility)
+                    if (requestLogJson.trim().startsWith('{')) {
+                        var requestLog = JSON.parse(requestLogJson);
+                        for (var key in requestLog) {
+                            if (requestLog.hasOwnProperty(key) && requestLog[key]) {
+                                var label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                var value = requestLog[key];
+                                
+                                // Format based on field type
+                                if (key.toLowerCase().includes('mac') || key.toLowerCase().includes('station')) {
+                                    value = '<code>' + value + '</code>';
+                                } else if (key.toLowerCase().includes('ip') || key.toLowerCase().includes('address')) {
+                                    value = '<code>' + value + '</code>';
+                                } else if (key.toLowerCase().includes('port')) {
+                                    value = '<code>' + value + '</code>';
+                                } else if (key.toLowerCase().includes('ssid')) {
+                                    value = '<strong>' + value + '</strong>';
+                                }
+                                
+                                detailsHtml += '<tr><td class="fw-bold" style="width: 40%;">' + label + '</td><td>' + value + '</td></tr>';
+                            }
                         }
-                        // Format IP addresses
-                        else if (key === 'nas_ip' || key === 'packet_src_ip') {
-                            value = '<code>' + value + '</code>';
+                    } else {
+                        // Parse pipe-delimited format: "key1:value1|key2:value2|..."
+                        var pairs = requestLogJson.split('|');
+                        for (var i = 0; i < pairs.length; i++) {
+                            var pair = pairs[i].split(':');
+                            if (pair.length === 2) {
+                                var key = pair[0].trim();
+                                var value = pair[1].trim();
+                                
+                                // Skip empty values
+                                if (!value) continue;
+                                
+                                // Create friendly label from key
+                                var label = key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                
+                                // Format based on field type
+                                if (key.toLowerCase().includes('mac') || key.toLowerCase().includes('station')) {
+                                    value = '<code>' + value + '</code>';
+                                } else if (key.toLowerCase().includes('ip') && !key.toLowerCase().includes('octets')) {
+                                    value = '<code>' + value + '</code>';
+                                } else if (key.toLowerCase().includes('port') && !key.toLowerCase().includes('type') && !key.toLowerCase().includes('packets')) {
+                                    value = '<code>' + value + '</code>';
+                                } else if (key.toLowerCase().includes('ssid') || key.toLowerCase().includes('essid')) {
+                                    value = '<strong>' + value + '</strong>';
+                                }
+                                
+                                detailsHtml += '<tr><td class="fw-bold" style="width: 40%;">' + label + '</td><td>' + value + '</td></tr>';
+                            }
                         }
-                        // Highlight SSID
-                        else if (key === 'aruba_essid') {
-                            value = '<strong>' + value + '</strong>';
-                        }
-
-                        detailsHtml += '<tr><td class="fw-bold" style="width: 40%;">' + label + '</td><td>' + value + '</td></tr>';
                     }
+                } catch (e) {
+                    // If parsing fails, show raw data
+                    detailsHtml = '<tr><td colspan="2" class="text-warning"><i class="fas fa-exclamation-circle"></i> Raw request data (parsing error):</td></tr>';
+                    detailsHtml += '<tr><td colspan="2"><pre style="font-size: 0.85em; max-height: 200px; overflow-y: auto;">' + requestLogJson + '</pre></td></tr>';
                 }
+                
+                document.getElementById('requestLogDetails').innerHTML = detailsHtml;
+                
+                // Display raw data in JSON View tab
+                document.getElementById('requestLogJson').textContent = requestLogJson;
 
                 document.getElementById('requestLogDetails').innerHTML = detailsHtml;
 

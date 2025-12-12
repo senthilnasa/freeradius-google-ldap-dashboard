@@ -292,6 +292,19 @@ authorize {
 	filter_username
 
 	#
+	#  CAPTURE ALL REQUEST ATTRIBUTES FOR JSON LOGGING
+	#  Store complete request data in session-state for post-auth MySQL logging
+	#  This persists through inner-tunnel processing for EAP-TTLS/PEAP
+	#  Supports: Standard RADIUS, Aruba, Cisco, Ruckus, Mist, UniFi, MikroTik
+	#
+	update session-state {
+		#  Build JSON object with ALL request attributes
+		#  Format: {"key":"value","key2":"value2",...}
+		Tmp-String-10 := "{\"User-Name\":\"%{User-Name}\",\"NAS-IP-Address\":\"%{NAS-IP-Address}\",\"NAS-Identifier\":\"%{NAS-Identifier}\",\"NAS-Port\":\"%{NAS-Port}\",\"NAS-Port-Type\":\"%{NAS-Port-Type}\",\"Calling-Station-Id\":\"%{Calling-Station-Id}\",\"Called-Station-Id\":\"%{Called-Station-Id}\",\"Acct-Session-Id\":\"%{Acct-Session-Id}\",\"Framed-IP-Address\":\"%{Framed-IP-Address}\",\"Framed-MTU\":\"%{Framed-MTU}\",\"Class\":\"%{Class}\",\"Filter-Id\":\"%{Filter-Id}\",\"Tunnel-Type\":\"%{Tunnel-Type}\",\"Tunnel-Medium-Type\":\"%{Tunnel-Medium-Type}\",\"Tunnel-Private-Group-Id\":\"%{Tunnel-Private-Group-Id}\",\"Aruba-Essid-Name\":\"%{Aruba-Essid-Name}\",\"Aruba-Essid-Id\":\"%{Aruba-Essid-Id}\",\"Aruba-Location-Id\":\"%{Aruba-Location-Id}\",\"Aruba-AP-Name\":\"%{Aruba-AP-Name}\",\"Aruba-AP-Serial\":\"%{Aruba-AP-Serial}\",\"Cisco-AVPair\":\"%{Cisco-AVPair}\",\"Ruckus-AP-Name\":\"%{Ruckus-AP-Name}\",\"Ruckus-SSID\":\"%{Ruckus-SSID}\",\"Mist-AP-Name\":\"%{Mist-AP-Name}\",\"UniFi-SSID\":\"%{UniFi-SSID}\",\"MikroTik-Group\":\"%{MikroTik-Group}\"}"
+	}
+
+
+	#
 	#  Some broken equipment sends passwords with embedded zeros.
 	#  i.e. the debug output will show
 	#
@@ -576,7 +589,24 @@ authenticate {
 	#  LDAP servers do not.
 	#
 	Auth-Type LDAP {
-		ldap
+		#  Domain-based LDAP authentication
+		#  Call the appropriate LDAP module based on domain extracted from User-Name
+		if (&request:Tmp-String-0 == "krea.edu.in") {
+			ldap_krea_edu_in
+		}
+		elsif (&request:Tmp-String-0 == "krea.ac.in") {
+			ldap_krea_ac_in
+		}
+		elsif (&request:Tmp-String-0 == "ifmr.ac.in") {
+			ldap_ifmr_ac_in
+		}
+		elsif (&request:Tmp-String-0 == "alumni.krea.edu.in") {
+			ldap_alumni_krea_edu_in
+		}
+		else {
+			#  Fallback to default ldap module for unknown domains
+			ldap
+		}
 	}
 
 	#
