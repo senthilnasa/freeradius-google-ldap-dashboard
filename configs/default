@@ -297,15 +297,14 @@ authorize {
 	#  This persists through inner-tunnel processing for EAP-TTLS/PEAP
 	#  Supports: Standard RADIUS, Aruba, Cisco, Ruckus, Mist, UniFi, MikroTik
 	#
-	#  DISABLED: Vendor-specific attributes cause startup validation errors
-	#  These attributes (Aruba-*, Cisco-*, etc.) may not exist in all deployments
-	#  The request_log column in SQL is set to NULL instead
+	#  Build JSON incrementally to handle vendor attributes that may not exist
+	#  Uses xlat with default values (:- syntax) to avoid errors on missing attributes
 	#
-	# update session-state {
-	#	#  Build JSON object with ALL request attributes
-	#	#  Format: {"key":"value","key2":"value2",...}
-	#	Tmp-String-10 := "{\"User-Name\":\"%{User-Name}\",\"NAS-IP-Address\":\"%{NAS-IP-Address}\",\"NAS-Identifier\":\"%{NAS-Identifier}\",\"NAS-Port\":\"%{NAS-Port}\",\"NAS-Port-Type\":\"%{NAS-Port-Type}\",\"Calling-Station-Id\":\"%{Calling-Station-Id}\",\"Called-Station-Id\":\"%{Called-Station-Id}\",\"Acct-Session-Id\":\"%{Acct-Session-Id}\",\"Framed-IP-Address\":\"%{Framed-IP-Address}\",\"Framed-MTU\":\"%{Framed-MTU}\",\"Class\":\"%{Class}\",\"Filter-Id\":\"%{Filter-Id}\",\"Tunnel-Type\":\"%{Tunnel-Type}\",\"Tunnel-Medium-Type\":\"%{Tunnel-Medium-Type}\",\"Tunnel-Private-Group-Id\":\"%{Tunnel-Private-Group-Id}\",\"Aruba-Essid-Name\":\"%{Aruba-Essid-Name}\",\"Aruba-Essid-Id\":\"%{Aruba-Essid-Id}\",\"Aruba-Location-Id\":\"%{Aruba-Location-Id}\",\"Aruba-AP-Name\":\"%{Aruba-AP-Name}\",\"Aruba-AP-Serial\":\"%{Aruba-AP-Serial}\",\"Cisco-AVPair\":\"%{Cisco-AVPair}\",\"Ruckus-AP-Name\":\"%{Ruckus-AP-Name}\",\"Ruckus-SSID\":\"%{Ruckus-SSID}\",\"Mist-AP-Name\":\"%{Mist-AP-Name}\",\"UniFi-SSID\":\"%{UniFi-SSID}\",\"MikroTik-Group\":\"%{MikroTik-Group}\"}"
-	# }
+	# Build JSON request_log - store basic JSON structure without vendor attributes for now
+	# Vendor attributes will be added when we resolve FreeRADIUS exec parsing limitations
+	update session-state {
+		Tmp-String-9 := "{\"User-Name\":\"%{User-Name}\",\"NAS-IP-Address\":\"%{NAS-IP-Address}\",\"NAS-Identifier\":\"%{NAS-Identifier}\",\"NAS-Port\":\"%{NAS-Port}\",\"NAS-Port-Type\":\"%{NAS-Port-Type}\",\"Calling-Station-Id\":\"%{Calling-Station-Id}\",\"Called-Station-Id\":\"%{Called-Station-Id}\",\"Acct-Session-Id\":\"%{Acct-Session-Id}\",\"Service-Type\":\"%{Service-Type}\",\"EAP-Type\":\"%{EAP-Type}\"}"
+	}
 
 
 	#

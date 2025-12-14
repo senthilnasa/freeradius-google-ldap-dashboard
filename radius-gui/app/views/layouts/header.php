@@ -219,6 +219,7 @@
             <li><a href="index.php?page=auth-log" class="<?= isset($_GET['page']) && $_GET['page'] === 'auth-log' ? 'active' : '' ?>"><i class="fas fa-clipboard-list"></i> Auth Log</a></li>
             <li><a href="index.php?page=user-history" class="<?= isset($_GET['page']) && $_GET['page'] === 'user-history' ? 'active' : '' ?>"><i class="fas fa-history"></i> User History</a></li>
             <li><a href="index.php?page=reports" class="<?= isset($_GET['page']) && $_GET['page'] === 'reports' ? 'active' : '' ?>"><i class="fas fa-file-pdf"></i> Reports</a></li>
+            <li><a href="index.php?page=nas" class="<?= isset($_GET['page']) && $_GET['page'] === 'nas' ? 'active' : '' ?>"><i class="fas fa-network-wired"></i> NAS Management</a></li>
             <li><a href="index.php?page=settings" class="<?= isset($_GET['page']) && $_GET['page'] === 'settings' ? 'active' : '' ?>"><i class="fas fa-cog"></i> Settings</a></li>
             <li><a href="index.php?page=users" class="<?= isset($_GET['page']) && $_GET['page'] === 'users' ? 'active' : '' ?>"><i class="fas fa-users-cog"></i> User Management</a></li>
             <li style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">

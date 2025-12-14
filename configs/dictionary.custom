@@ -11,11 +11,16 @@ ATTRIBUTE	Error-Type	3000	string
 ATTRIBUTE	LDAP-Base-DN	3001	string
 
 # =================================================================================
-# Aruba Vendor-Specific Attributes (VSA)
+# Vendor-Specific Attributes (VSA) - Multi-Vendor Support
 # =================================================================================
-# NOTE: FreeRADIUS 3.0.23 includes dictionary.aruba by default
-# The Aruba vendor (ID: 14823) and common attributes are already defined
-# including: Aruba-User-Role, Aruba-User-VLAN, Aruba-AP-Group, etc.
+# NOTE: FreeRADIUS 3.0.23 includes dictionaries for most major vendors:
+# - dictionary.aruba (Aruba-Essid-Name, Aruba-Location-Id, Aruba-AP-Group, Aruba-AP-Name)
+# - dictionary.cisco (Cisco-AVPair, Cisco-NAS-Port)
+# - dictionary.mikrotik (MikroTik-Group)
+# - dictionary.hp (HP-Port-Priority)
+# - dictionary.ruckus (Ruckus-SSID, Ruckus-AP-MAC, Ruckus-AP-Name)
+# - dictionary.ubnt (Ubiquiti attributes)
 #
-# No additional Aruba definitions needed - use built-in dictionary
+# All vendor attributes used in build-request-json.sh are available in standard dictionaries
+# No custom vendor attribute definitions needed
 # =================================================================================
